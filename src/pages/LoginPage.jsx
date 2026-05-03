@@ -20,7 +20,7 @@ export default function LoginPage({ onLogin }) {
         <div className="flex items-center gap-3 mb-10">
           <div className="w-12 h-12 rounded-xl bg-white border border-gray-200 flex items-center justify-center shadow-sm flex-shrink-0">
             {/* Logo mark — S icon */}
-            <img src='/Shelter_logo.png' alt="Shelter Logo" className="w-12 h-12"/>
+            <img src='/Shelter_logo.png' alt="Shelter Logo" className="w-9 h-9"/>
           </div>
           <div>
             <div className="text-sm font-semibold tracking-widest text-gray-900 uppercase leading-tight">
