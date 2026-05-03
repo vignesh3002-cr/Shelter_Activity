@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Sora', sans-serif;
+  background: #F2F2F2;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes barGrow {
+  from { height: 0; }
+  to   { height: var(--bar-h); }
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.animate-fade-up   { animation: fadeUp 0.45s cubic-bezier(0.4,0,0.2,1) both; }
+.animate-fade-in   { animation: fadeIn 0.35s ease both; }
+.animate-slide-in  { animation: slideIn 0.4s cubic-bezier(0.4,0,0.2,1) both; }
+
+.delay-1 { animation-delay: 0.05s; }
+.delay-2 { animation-delay: 0.10s; }
+.delay-3 { animation-delay: 0.15s; }
+.delay-4 { animation-delay: 0.20s; }
+.delay-5 { animation-delay: 0.25s; }
+.delay-6 { animation-delay: 0.30s; }
+
+/* Bar chart grow animation */
+.bar-animate {
+  animation: barGrow 0.7s cubic-bezier(0.4,0,0.2,1) both;
+  transform-origin: bottom;
+}
