@@ -41,7 +41,7 @@ export default function LoginPage({ onLogin }) {
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Email */}
           <div>
-            <label className="block font-mono text-xs text-gray-400 tracking-widest uppercase mb-2">
+            <label className="block font-mono text-xs text-gray-400 tracking-widest mb-2">
               User Email
             </label>
             <div className="flex items-center gap-3 bg-white border border-gray-200 rounded-xl h-14 px-4 focus-within:border-gray-400 transition-colors">
@@ -61,7 +61,7 @@ export default function LoginPage({ onLogin }) {
 
           {/* Password */}
           <div>
-            <label className="block font-mono text-xs text-gray-400 tracking-widest uppercase mb-2">
+            <label className="block font-mono text-xs text-gray-400 tracking-widest mb-2">
               Password
             </label>
             <div className="flex items-center gap-3 bg-white border border-gray-200 rounded-xl h-14 px-4 focus-within:border-gray-400 transition-colors">
