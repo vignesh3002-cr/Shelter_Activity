@@ -1,23 +1,39 @@
 import { useState } from 'react'
+import axios from 'axios'
+
 
 export default function LoginPage({ onLogin }) {
-  const [email, setEmail]       = useState('')
+  const [UserID, setUserID]       = useState('')
   const [password, setPassword] = useState('')
   const [showPw, setShowPw]     = useState(false)
   const [loading, setLoading]   = useState(false)
+  const[error,setError] = useState('')
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault()
     setLoading(true)
-    setTimeout(() => { setLoading(false); onLogin() }, 900)
+    try{
+    const res=await axios.post('http://localhost:5000/api/auth/login', { UserID, password });
+    console.log(res.data);
+ // Adjust based on actual response structure
+    if(res.data["Login status"] ==="YES"){
+      onLogin()
+    }else{
+      setError("Invalid UserID or Password");
+    }
+    setLoading(false)
+  } catch (error) {
+    console.error("Login error:", error);
+    setError("SERVER ERROR");
+    setLoading(false)
   }
-
+  }
   return (
     <div className="flex items-center justify-center min-h-screen px-4 bg-gray-100">
       <div className="w-full max-w-md px-8 py-10 bg-gray-100 rounded-2xl animate-fade-up">
 
         {/* Brand */}
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center gap-3 mb-10">
           <div className="flex items-center justify-center flex-shrink-0 w-12 h-12 bg-white border border-gray-200 shadow-sm rounded-xl">
             {/* Logo mark — S icon */}
             <img src='/Shelter_logo.png' alt="Shelter Logo" className="w-9 h-9"/>
@@ -42,7 +58,7 @@ export default function LoginPage({ onLogin }) {
           {/* Email */}
           <div>
             <label className="block mb-2 font-mono text-xs tracking-widest text-gray-400">
-              User Email
+              UserID
             </label>
             <div className="flex items-center gap-3 px-4 transition-colors bg-white border border-gray-200 rounded-xl h-14 focus-within:border-gray-400">
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" className="flex-shrink-0">
@@ -50,9 +66,9 @@ export default function LoginPage({ onLogin }) {
                 <path d="M1.5 6.5l7.5 5 7.5-5" stroke="#ABABAB" strokeWidth="1.4" strokeLinecap="round"/>
               </svg>
               <input
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
+                type="text"
+                value={UserID}
+                onChange={e => setUserID(e.target.value)}
                 placeholder="hello@Shelter.co"
                 className="flex-1 font-sans text-sm text-gray-800 placeholder-gray-300 bg-transparent outline-none"
               />
@@ -93,6 +109,11 @@ export default function LoginPage({ onLogin }) {
               </button>
             </div>
           </div>
+          {error && (
+          <p style={{ color: "red" }}>
+            {error}
+          </p>
+        )}
 
           {/* Forgot */}
           <div className="text-right">

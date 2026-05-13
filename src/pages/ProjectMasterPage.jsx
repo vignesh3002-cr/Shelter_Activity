@@ -1,5 +1,56 @@
-import { useState } from 'react'
-import { PROJECTS, STATUS_STYLES } from '../data/projects'
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+export default function ProjectMasterPage() {
+
+  const [projects, setProjects] = useState([]);
+
+  useEffect(() => {
+
+    const fetchProjects = async () => {
+
+      try {
+
+        const res = await axios.get(
+          'http://localhost:5000/api/projects/my-projects'
+        );
+
+        console.log('Fetched projects:', res.data);
+
+        setProjects(res.data);
+
+      } catch (error) {
+
+        console.error(
+          'Error fetching projects:',
+          error
+        );
+
+      }
+    };
+
+    fetchProjects();
+
+  }, []);
+{/*}
+  return (
+    <div>
+
+      <h1>Project Master Page</h1>
+
+      <ul>
+        {projects.map((project, id) => (
+          <ul key={id}>
+            <li>{project.ProjectID}</li>
+            <li>{project.ProjectOrTask}</li>
+          </ul>
+        ))}
+      </ul>
+
+    </div>
+  );
+}
+  */}
 
 function SearchIcon() {
   return (
@@ -11,16 +62,17 @@ function SearchIcon() {
 }
 
 function StatusBadge({ status }) {
-  const s = STATUS_STYLES[status] || STATUS_STYLES['Planning']
+  const s = projects[status] || projects['Planning']
   return (
-    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-medium tracking-wide uppercase ${s.bg} ${s.text}`}>
-      <span className={`w-1.5 h-1.5 rounded-full ${s.dot}`}/>
+    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-medium tracking-wide uppercase bg-emerald-50 text-emerald-700">
+      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"/>
       {status}
     </span>
   )
 }
 
-function ProgressBar({ value, status }) {
+
+function ProgressBar({status}) {
   const colorMap = {
     'Active': 'bg-emerald-500',
     'Completed': 'bg-gray-700',
@@ -31,34 +83,35 @@ function ProgressBar({ value, status }) {
     <div className="flex items-center gap-3">
       <div className="flex-1 h-1.5 bg-gray-150 rounded-full overflow-hidden">
         <div
-          className={`h-full rounded-full transition-all duration-700 ${colorMap[status] || 'bg-gray-700'}`}
-          style={{ width: `${value}%` }}
+          className="h-full transition-all duration-700 rounded-full bg-emerald-500 w-[60%]"
+          //style={{ width: status === 'Active' ? '60%' : status === 'Completed' ? '100%' : status === 'On Hold' ? '30%' : '10%' }}
         />
       </div>
-      <span className="w-8 font-mono text-xs font-medium text-right text-gray-600">{value}%</span>
+     {/* <span className="w-8 font-mono text-xs font-medium text-right text-gray-600">{value}%</span>*/}
     </div>
   )
 }
 
-export default function ProjectMasterPage({ onViewReport, onLogout }) {
+//export default function ProjectMasterPage({ onViewReport, onLogout }) {
+ 
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('All')
 
   const statuses = ['All', 'Active', 'Completed', 'On Hold', 'Planning']
 
-  const filtered = PROJECTS.filter(p => {
-    const matchSearch = p.name.toLowerCase().includes(search.toLowerCase()) ||
-      p.id.toLowerCase().includes(search.toLowerCase()) ||
-      p.customer.toLowerCase().includes(search.toLowerCase())
+  const filtered = projects.filter(p => {
+    const matchSearch = p.ProjectName.toLowerCase().includes(search.toLowerCase()) ||
+      p.ProjectID.toLowerCase().includes(search.toLowerCase())// ||
+      //p.customer.toLowerCase().includes(search.toLowerCase()) 
     const matchFilter = filter === 'All' || p.status === filter
     return matchSearch && matchFilter
   })
 
   const counts = {
-    total: PROJECTS.length,
-    active: PROJECTS.filter(p => p.status === 'Active').length,
-    completed: PROJECTS.filter(p => p.status === 'Completed').length,
-    onHold: PROJECTS.filter(p => p.status === 'On Hold').length,
+    total: projects.length,
+    active: projects.filter(p => p.status === 'Active').length,
+    completed: projects.filter(p => p.status === 'Completed').length,
+    onHold: projects.filter(p => p.status === 'On Hold').length,
   }
 
   return (
@@ -81,7 +134,7 @@ export default function ProjectMasterPage({ onViewReport, onLogout }) {
               JR
             </div>
             <button
-              onClick={onLogout}
+              //onClick={onLogout}
               className="text-xs font-mono text-gray-400 hover:text-gray-700 transition-colors px-3 py-1.5 rounded-lg hover:bg-gray-100 border border-gray-200 hover:border-gray-200"
             >
               Sign out
@@ -98,22 +151,17 @@ export default function ProjectMasterPage({ onViewReport, onLogout }) {
           <p className="mt-1 text-sm text-gray-400">Select a project to view its detailed activity report</p>
         </div>
 
-        {/* Stats row */}
+        {/* Stats row*/}
         <div className="grid grid-cols-2 gap-3 mb-6 md:grid-cols-4 animate-fade-up delay-1">
-          {[
-            { label: 'Total Projects', value: counts.total, color: 'text-gray-900' },
-            { label: 'Active',         value: counts.active,    color: 'text-emerald-600' },
-            { label: 'Completed',      value: counts.completed, color: 'text-gray-600' },
-            { label: 'On Hold',        value: counts.onHold,    color: 'text-amber-600' },
-          ].map(s => (
-            <div key={s.label} className="p-4 bg-white border border-gray-200 rounded-xl">
-              <div className={`text-2xl font-bold tracking-tight ${s.color}`}>{s.value}</div>
-              <div className="text-sm text-gray-400 mt-0.5 font-mono tracking-wide">{s.label}</div>
+          {projects.map((project, id) => (
+            <div key={id} className="p-4 bg-white border border-gray-200 rounded-xl">
+              <div className={"text-2xl font-bold tracking-tight text-slate-600" }>{projects.length}</div>
+              <div className="text-sm text-gray-400 mt-0.5 font-mono tracking-wide">{project.ProjectName}</div>
             </div>
           ))}
         </div>
 
-        {/* Search + filter bar */}
+        {/* Search + filter bar*/}
         <div className="flex flex-col items-center gap-1 md:flex-row animate-fade-up delay-2">
           <div className="flex items-center flex-1 gap-3 px-4 py-1.5 transition-colors bg-white border border-gray-200 rounded-xl focus-within:border-gray-400">
             <SearchIcon/>
@@ -144,11 +192,11 @@ export default function ProjectMasterPage({ onViewReport, onLogout }) {
 
         {/* Table header */}
         <div className="px-5 py-3 border border-gray-200 bg-gray-50 rounded-t-xl animate-fade-up delay-2">
-          <div className="grid justify-between grid-cols-2 md:grid-cols-12 md:gap-4">
-            <span className="font-mono text-xs tracking-widest text-gray-400 md:col-span-4">Project Name</span>
-            <span className="hidden font-mono text-xs tracking-widest text-gray-400 md:col-span-3 md:inline-block">Customer</span>
-            <span className="hidden font-mono text-xs tracking-widest text-gray-400 md:col-span-2 md:inline-block">Status</span>
-            <span className="font-mono text-xs tracking-widest text-right text-gray-400 md:col-span-2">Action</span>
+          <div className="grid justify-between grid-cols-2 md:grid-cols-3">
+            <span className="font-mono text-xs tracking-widest text-gray-400 ">Project Name</span>
+            <span className="hidden font-mono text-xs tracking-widest text-gray-400">Customer</span>
+            <span className="hidden font-mono text-xs tracking-widest text-gray-400 md:inline-block">Status</span>
+            <span className="font-mono text-xs tracking-widest text-right text-gray-400 ">Action</span>
           </div>
         </div>
 
@@ -165,28 +213,28 @@ export default function ProjectMasterPage({ onViewReport, onLogout }) {
                 className={`px-5 py-4 border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-all duration-150 animate-slide-in`}
                 style={{ animationDelay: `${0.05 * i + 0.15}s` }}
               >
-                <div className="grid justify-between grid-cols-2 gap-4 md:items-center md:gap-4 md:grid-cols-12">    
+                <div className="grid justify-between grid-cols-2 gap-4 md:items-center md:grid-cols-3">    
                   {/* Name */}
-                  <div className="row-span-2 md:col-span-4">
-                    <span className="py-1 font-mono text-xs text-gray-400 rounded-md ">{project.id}</span>
-                    <div className="text-sm font-semibold text-gray-900">{project.name}</div>
+                  <div className="row-span-2">
+                    <span className="py-1 font-mono text-xs text-gray-400 rounded-md ">{project.ProjectID}</span>
+                    <div className="text-sm font-semibold text-gray-900">{project.ProjectName}</div>
                     <div className="mt-1.5">
-                      <ProgressBar value={project.progress} status={project.status}/>
+                      <ProgressBar /*value={project.progress}*/ status={project.status}/>
                     </div>
-                      <div className="text-xs leading-relaxed text-gray-500">{project.customer}</div>
+                      {/*<div className="text-xs leading-relaxed text-gray-500">{project.customer}</div>*/}
                   </div>
 
-                  {/* Customer */}
+                  {/* Customer 
                   <div className="hidden md:col-span-3 md:inline-block">
                     <div className="text-xs leading-relaxed text-gray-500">{project.customer}</div>
-                  </div>
+                  </div>*/}
 
                   {/* Status */}
-                  <div className="hidden md:col-span-2 md:inline-block">
-                    <StatusBadge status={project.status}/>
+                  <div className="hidden md:inline-block">
+                    <StatusBadge status={project.Status}/>
                   </div>
 
-                  {/* Action */}
+                  {/* Action
                   <div className="flex justify-end col-span-1 md:col-span-2">
                     <button
                       onClick={() => onViewReport(project)}
@@ -197,7 +245,7 @@ export default function ProjectMasterPage({ onViewReport, onLogout }) {
                         <path d="M2 5h6M5.5 2L8 5l-2.5 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </button>
-                  </div>
+                  </div>*/}
                 </div>
               </div>
             ))
@@ -205,7 +253,7 @@ export default function ProjectMasterPage({ onViewReport, onLogout }) {
         </div>
 
         <p className="mt-6 font-mono text-xs text-center text-gray-300">
-          Showing {filtered.length} of {PROJECTS.length} projects
+          Showing {filtered.length} of {projects.length} projects
         </p>
       </main>
     </div>
