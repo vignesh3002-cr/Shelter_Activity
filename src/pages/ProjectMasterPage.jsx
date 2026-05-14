@@ -4,13 +4,14 @@ import axios from 'axios';
 export default function ProjectMasterPage() {
 
   const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
   const API = import.meta.env.VITE_API_URL;
   useEffect(() => {
 
     const fetchProjects = async () => {
 
       try {
-
+        
         const res = await axios.get(
           `${API}/api/projects/my-projects`
         );
@@ -18,7 +19,7 @@ export default function ProjectMasterPage() {
         console.log('Fetched projects:', res.data);
 
         setProjects(res.data);
-
+        setLoading(false);
       } catch (error) {
 
         console.error(
@@ -116,7 +117,17 @@ function ProgressBar({status}) {
 
   return (
     <div className="min-h-screen bg-gray-100">
-
+      {loading && (<motion.img
+        src="/Shelter_logo.png"
+           animate={{
+             scale: [1, 1.2, 1],
+             rotate: [0, 5, -5, 0],
+        }}
+        transition={{
+           duration: 1.5,
+          repeat: Infinity,
+       }}
+   ></motion.img>)}
       {/* Top Nav */}
       <header className="sticky top-0 z-20 bg-white border-b border-gray-200">
         <div className="flex items-center justify-between h-16 max-w-6xl px-2 mx-auto md:px-6">
