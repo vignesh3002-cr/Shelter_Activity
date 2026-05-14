@@ -8,12 +8,12 @@ export default function LoginPage({ onLogin }) {
   const [showPw, setShowPw]     = useState(false)
   const [loading, setLoading]   = useState(false)
   const[error,setError] = useState('')
-
+  const API = import.meta.env.VITE_API_URL;
   const handleSubmit = async(e) => {
     e.preventDefault()
     setLoading(true)
     try{
-    const res=await axios.post('http://localhost:5000/api/auth/login', { UserID, password });
+    const res=await axios.post(`${API}/api/auth/login`, { UserID, password });
     console.log(res.data);
  // Adjust based on actual response structure
     if(res.data["Login status"] ==="YES"){

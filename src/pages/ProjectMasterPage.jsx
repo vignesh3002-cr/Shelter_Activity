@@ -4,7 +4,7 @@ import axios from 'axios';
 export default function ProjectMasterPage() {
 
   const [projects, setProjects] = useState([]);
-
+  const API = import.meta.env.VITE_API_URL;
   useEffect(() => {
 
     const fetchProjects = async () => {
@@ -12,7 +12,7 @@ export default function ProjectMasterPage() {
       try {
 
         const res = await axios.get(
-          'http://localhost:5000/api/projects/my-projects'
+          `${API}/api/projects/my-projects`
         );
 
         console.log('Fetched projects:', res.data);
