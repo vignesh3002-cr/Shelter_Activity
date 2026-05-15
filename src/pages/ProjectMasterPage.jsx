@@ -106,7 +106,7 @@ function ProgressBar({status}) {
     const matchSearch = p.ProjectName.toLowerCase().includes(search.toLowerCase()) ||
       p.ProjectID.toLowerCase().includes(search.toLowerCase())// ||
       //p.customer.toLowerCase().includes(search.toLowerCase()) 
-    const matchFilter = filter === 'All' || p.status === filter
+    const matchFilter = filter === 'All' || p.Status === filter
     return matchSearch && matchFilter
   })
   const logout = () => {
@@ -190,9 +190,9 @@ function ProgressBar({status}) {
             />
           </div>
           <div className="gap-1 p-1 bg-white border border-gray-200 md:flex rounded-xl">
-            {statuses.map(s => (
+            {statuses.map((s, id) => (
               <button
-                key={s}
+                key={id}
                 onClick={() => setFilter(s)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-mono font-medium tracking-wide transition-all ${
                   filter === s
