@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 
-export default function ProjectMasterPage() {
+
+export default function ProjectMasterPage({ onLogout }) {
 
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -108,14 +109,15 @@ function ProgressBar({status}) {
     const matchFilter = filter === 'All' || p.status === filter
     return matchSearch && matchFilter
   })
-
+  const logout = () => {
+    onLogout()
+  }
   const counts = {
     total: projects.length,
     active: projects.filter(p => p.status === 'Active').length,
     completed: projects.filter(p => p.status === 'Completed').length,
     onHold: projects.filter(p => p.status === 'On Hold').length,
   }
-
   return (
     <div className="min-h-screen bg-gray-100">
       {loading && (<div className='flex items-center justify-center h-screen bg-white'><motion.img
@@ -146,12 +148,13 @@ function ProgressBar({status}) {
             <div className="flex items-center justify-center w-8 h-8 text-xs font-semibold text-white rounded-full bg-gray-950">
               JR
             </div>
-            <button
-              //onClick={onLogout}
+    
+            <button onClick={logout}
               className="text-xs font-mono text-gray-400 hover:text-gray-700 transition-colors px-3 py-1.5 rounded-lg hover:bg-gray-100 border border-gray-200 hover:border-gray-200"
             >
               Sign out
             </button>
+          
           </div>
         </div>
       </header>

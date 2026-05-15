@@ -25,10 +25,18 @@ export default function App() {
   }
 
   if (page === 'login')    return <LoginPage onLogin={handleLogin}/>
-  if (page === 'projects') return <ProjectMasterPage/>
+  if (page === 'projects') return <ProjectMasterPage onLogout={handleLogout}/>
   {/*
   if (page === 'report')   return <ReportPage project={activeProject} onBack={handleBack}/>
   */}
 
-  return null
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<LoginPage onLogin={handleLogin}/>} />
+        <Route path="/projects" element={<ProjectMasterPage onLogout={handleLogout}/>} />
+        {/* <Route path="/report" element={<ReportPage project={activeProject} onBack={handleBack}/>} /> */}
+      </Routes>
+    </BrowserRouter>
+  )
 }
