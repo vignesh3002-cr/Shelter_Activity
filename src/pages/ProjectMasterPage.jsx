@@ -82,7 +82,7 @@ function ProgressBar({status}) {
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('All')
 
-  const statuses = ['All', 'Created', 'Estimated', 'Scheduled', 'InProcess', 'Finished', 'Closed']
+  const statuses = ['All', 'Created', 'Estimated', 'Scheduled', 'InProcess', 'Finished']
 
   const filtered = projects.filter(p => {
     const matchSearch = p.ProjectName.toLowerCase().includes(search.toLowerCase()) ||
