@@ -82,13 +82,13 @@ function ProgressBar({status}) {
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('All')
 
-  const statuses = ['All', 'Active', 'Completed', 'On Hold', 'Planning']
+  const statuses = ['All', 'Created', 'Estimated', 'Scheduled', 'InProcess', 'Finished', 'Closed']
 
   const filtered = projects.filter(p => {
     const matchSearch = p.ProjectName.toLowerCase().includes(search.toLowerCase()) ||
       p.ProjectID.toLowerCase().includes(search.toLowerCase())// ||
       //p.customer.toLowerCase().includes(search.toLowerCase()) 
-    const matchFilter = filter === 'All' || p.Status === filter
+    const matchFilter = filter === 'All' || p.ProjectStage === filter
     return matchSearch && matchFilter
   })
   const logout = () => {
@@ -206,11 +206,11 @@ function ProgressBar({status}) {
               No projects found
             </div>
           ) : (
-            filtered.map((project, i) => (
+            filtered.map((project, id) => (
               <div
-                key={project.id}
+                key={id}
                 className={`px-5 py-4 border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-all duration-150 animate-slide-in`}
-                style={{ animationDelay: `${0.05 * i + 0.15}s` }}
+                style={{ animationDelay: `${0.05 * id + 0.15}s` }}
               >
                 <div className="grid justify-between grid-cols-2 gap-4 md:items-center md:grid-cols-3">    
                   {/* Name */}
@@ -236,7 +236,7 @@ function ProgressBar({status}) {
                 
                   <div className="flex justify-end col-span-1">
                     <button
-                      onClick={() => onViewReport(project)}
+                      onClick={() => onViewReport(id)}
                       className="flex items-center gap-2 px-4 py-2 font-mono text-xs font-semibold tracking-wide text-white transition-all rounded-lg bg-gray-950 hover:bg-gray-700 active:scale-95"
                     >
                       View Report
