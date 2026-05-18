@@ -208,12 +208,12 @@ export default function ReportPage({ project, onBack }) {
     <div className="min-h-screen bg-gray-100">
 
       {/* Top Nav */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-20">
-        <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+      <header className="sticky top-0 z-20 bg-white border-b border-gray-200">
+        <div className="flex items-center justify-between h-16 max-w-5xl px-6 mx-auto">
           <div className="flex items-center gap-3">
             <button
               onClick={onBack}
-              className="w-9 h-9 rounded-lg border border-gray-200 bg-gray-50 flex items-center justify-center hover:bg-gray-100 transition-colors"
+              className="flex items-center justify-center transition-colors border border-gray-200 rounded-lg w-9 h-9 bg-gray-50 hover:bg-gray-100"
               title="Back to projects"
             >
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -221,53 +221,53 @@ export default function ReportPage({ project, onBack }) {
               </svg>
             </button>
             <div>
-              <div className="font-mono text-xs text-gray-400 tracking-widest uppercase">{project.id} · View Report</div>
-              <div className="font-bold text-sm text-gray-900 tracking-tight">{project.name}</div>
+              <div className="font-mono text-xs tracking-widest text-gray-400 uppercase">{project.id} · View Report</div>
+              <div className="text-sm font-bold tracking-tight text-gray-900">{project.name}</div>
             </div>
           </div>
           <div className="flex items-center gap-3">
             <StatusBadge status={project.status}/>
-            <div className="w-8 h-8 rounded-full bg-gray-950 text-white text-xs font-semibold flex items-center justify-center">JR</div>
+            <div className="flex items-center justify-center w-8 h-8 text-xs font-semibold text-white rounded-full bg-gray-950">JR</div>
           </div>
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-6 py-8 space-y-5">
+      <main className="max-w-5xl px-6 py-8 mx-auto space-y-5">
 
         {/* Report header card */}
-        <div className="bg-white border border-gray-200 rounded-2xl p-6 animate-fade-up">
-          <div className="font-mono text-xs text-gray-300 tracking-widest uppercase mb-2">Activity Report</div>
-          <h2 className="text-xl font-bold text-gray-950 tracking-tight mb-1">{project.name}</h2>
+        <div className="p-6 bg-white border border-gray-200 rounded-2xl animate-fade-up">
+          <div className="mb-2 font-mono text-xs tracking-widest text-gray-300 uppercase">Activity Report</div>
+          <h2 className="mb-1 text-xl font-bold tracking-tight text-gray-950">{project.name}</h2>
           <div className="flex items-center gap-3 mb-4">
             <StatusBadge status={project.status}/>
             <span className="text-xs text-gray-400">Customer: {project.customer}</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-xs text-gray-400 font-mono w-28 flex-shrink-0">Overall Progress</span>
-            <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+            <span className="flex-shrink-0 font-mono text-xs text-gray-400 w-28">Overall Progress</span>
+            <div className="flex-1 h-2 overflow-hidden bg-gray-100 rounded-full">
               <div
-                className="h-full bg-gray-900 rounded-full transition-all duration-1000"
+                className="h-full transition-all duration-1000 bg-gray-900 rounded-full"
                 style={{ width: `${project.progress}%` }}
               />
             </div>
-            <span className="font-mono text-xs font-semibold text-gray-700 w-8 text-right">{project.progress}%</span>
+            <span className="w-8 font-mono text-xs font-semibold text-right text-gray-700">{project.progress}%</span>
           </div>
         </div>
 
         {/* Chart card */}
-        <div className="bg-white border border-gray-200 rounded-2xl p-6 animate-fade-up delay-1">
+        <div className="p-6 bg-white border border-gray-200 rounded-2xl animate-fade-up delay-1">
           <div className="flex items-start justify-between mb-1">
             <div>
-              <h3 className="font-semibold text-gray-900 text-sm">Activity Rating Graph</h3>
+              <h3 className="text-sm font-semibold text-gray-900">Activity Rating Graph</h3>
               <p className="text-xs text-gray-400 mt-0.5">
                 Y-axis: Activities &nbsp;·&nbsp; X-axis: Codes A, B, C, D, E
               </p>
             </div>
-            <span className="font-mono text-xs text-gray-300 tracking-wide">Codes A – E</span>
+            <span className="font-mono text-xs tracking-wide text-gray-300">Codes A – E</span>
           </div>
 
           {/* Axis pills */}
-          <div className="flex gap-2 my-4 flex-wrap">
+          <div className="flex flex-wrap gap-2 my-4">
             <span className="flex items-center gap-1.5 bg-gray-100 text-gray-500 text-xs font-mono px-3 py-1.5 rounded-full border border-gray-200">
               ↑ Y-axis: <strong className="text-gray-800">Activities</strong>
             </span>
@@ -286,7 +286,7 @@ export default function ReportPage({ project, onBack }) {
                   className="w-2.5 h-2.5 rounded-sm flex-shrink-0"
                   style={{ background: BAR_COLORS[i], border: i === activities.length - 1 ? '1px solid #C8C8C8' : 'none' }}
                 />
-                <span className="text-xs text-gray-500 font-mono">{act.name}</span>
+                <span className="font-mono text-xs text-gray-500">{act.name}</span>
               </div>
             ))}
           </div>
@@ -295,15 +295,15 @@ export default function ReportPage({ project, onBack }) {
         {/* Average score per code */}
         <div className="animate-fade-up delay-2">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-gray-900 text-sm uppercase tracking-widest font-mono">Average Score per Code</h3>
+            <h3 className="font-mono text-sm font-semibold tracking-widest text-gray-900 uppercase">Average Score per Code</h3>
           </div>
           <div className="grid grid-cols-5 gap-3">
             {codeAvgs.map(({ code, avg: a }, i) => (
-              <div key={code} className="bg-white border border-gray-200 rounded-xl p-4 text-center animate-fade-up"
+              <div key={code} className="p-4 text-center bg-white border border-gray-200 rounded-xl animate-fade-up"
                 style={{ animationDelay: `${0.05 * i + 0.25}s` }}>
-                <div className="font-mono text-xs text-gray-300 uppercase tracking-widest mb-1">Code {code}</div>
-                <div className="text-2xl font-bold text-gray-950 tracking-tight">{a}</div>
-                <div className="text-xs text-gray-400 font-mono mt-1">avg rating</div>
+                <div className="mb-1 font-mono text-xs tracking-widest text-gray-300 uppercase">Code {code}</div>
+                <div className="text-2xl font-bold tracking-tight text-gray-950">{a}</div>
+                <div className="mt-1 font-mono text-xs text-gray-400">avg rating</div>
               </div>
             ))}
           </div>
@@ -312,10 +312,10 @@ export default function ReportPage({ project, onBack }) {
         {/* Activity Score Table */}
         <div className="animate-fade-up delay-3">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-gray-900 text-sm uppercase tracking-widest font-mono">Activity Score Table</h3>
+            <h3 className="font-mono text-sm font-semibold tracking-widest text-gray-900 uppercase">Activity Score Table</h3>
             <span className="font-mono text-xs text-gray-300">Codes A – E</span>
           </div>
-          <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+          <div className="overflow-hidden bg-white border border-gray-200 rounded-2xl">
             <table className="w-full" style={{ tableLayout: 'fixed', borderCollapse: 'collapse' }}>
               <colgroup>
                 <col style={{ width: 'auto' }}/>
@@ -323,16 +323,16 @@ export default function ReportPage({ project, onBack }) {
                 <col style={{ width: '56px' }}/>
               </colgroup>
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="text-left px-5 py-3 font-mono text-xs text-gray-400 uppercase tracking-widest font-medium">
+                <tr className="border-b border-gray-200 bg-gray-50">
+                  <th className="px-5 py-3 font-mono text-xs font-medium tracking-widest text-left text-gray-400 uppercase">
                     Activity
                   </th>
                   {CODES.map(c => (
-                    <th key={c} className="text-center py-3 font-mono text-xs text-gray-400 uppercase tracking-widest font-medium">
+                    <th key={c} className="py-3 font-mono text-xs font-medium tracking-widest text-center text-gray-400 uppercase">
                       {c}
                     </th>
                   ))}
-                  <th className="text-center pr-5 py-3 font-mono text-xs text-gray-600 uppercase tracking-widest font-semibold">
+                  <th className="py-3 pr-5 font-mono text-xs font-semibold tracking-widest text-center text-gray-600 uppercase">
                     Total
                   </th>
                 </tr>
@@ -341,17 +341,17 @@ export default function ReportPage({ project, onBack }) {
                 {actTotals.map((act, i) => (
                   <tr
                     key={i}
-                    className="border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors"
+                    className="transition-colors border-b border-gray-100 last:border-0 hover:bg-gray-50"
                   >
-                    <td className="px-5 py-3 text-sm font-medium text-gray-700 whitespace-nowrap overflow-hidden text-ellipsis">
+                    <td className="px-5 py-3 overflow-hidden text-sm font-medium text-gray-700 whitespace-nowrap text-ellipsis">
                       {act.name}
                     </td>
                     {CODES.map(c => (
-                      <td key={c} className="text-center py-3 font-mono text-xs font-medium text-gray-800">
+                      <td key={c} className="py-3 font-mono text-xs font-medium text-center text-gray-800">
                         {act[c]}
                       </td>
                     ))}
-                    <td className="text-center pr-5 py-3 font-mono text-xs font-bold text-gray-950">
+                    <td className="py-3 pr-5 font-mono text-xs font-bold text-center text-gray-950">
                       {act.total}
                     </td>
                   </tr>

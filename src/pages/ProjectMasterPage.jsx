@@ -3,9 +3,10 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 
 
-export default function ProjectMasterPage({ onLogout }) {
+export default function ProjectMasterPage({ onLogout, onViewReport }) {
 
   const [projects, setProjects] = useState([]);
+  const [projectListed, setProjectListed] = useState(false);
   const [loading, setLoading] = useState(true);
   const API = import.meta.env.VITE_API_URL;
   useEffect(() => {
@@ -22,6 +23,7 @@ export default function ProjectMasterPage({ onLogout }) {
 
         setProjects(res.data);
         setLoading(false);
+        setProjectListed(true);
       } catch (error) {
 
         console.error(
@@ -35,25 +37,6 @@ export default function ProjectMasterPage({ onLogout }) {
     fetchProjects();
 
   }, []);
-{/*}
-  return (
-    <div>
-
-      <h1>Project Master Page</h1>
-
-      <ul>
-        {projects.map((project, id) => (
-          <ul key={id}>
-            <li>{project.ProjectID}</li>
-            <li>{project.ProjectOrTask}</li>
-          </ul>
-        ))}
-      </ul>
-
-    </div>
-  );
-}
-  */}
 
 function SearchIcon() {
   return (
@@ -95,7 +78,6 @@ function ProgressBar({status}) {
   )
 }
 
-//export default function ProjectMasterPage({ onViewReport, onLogout }) {
  
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('All')
@@ -133,7 +115,8 @@ function ProgressBar({status}) {
        }}
    ></motion.img></div>)}
       {/* Top Nav */}
-      <header className="sticky top-0 z-20 bg-white border-b border-gray-200">
+
+   {projectListed && (<div><header className="sticky top-0 z-20 bg-white border-b border-gray-200">
         <div className="flex items-center justify-between h-16 max-w-6xl px-2 mx-auto md:px-6">
           <div className="flex items-center gap-3">
             <div className="flex items-center justify-center w-8 h-8 bg-white rounded-lg">
@@ -247,11 +230,11 @@ function ProgressBar({status}) {
 
                   {/* Status */}
                   <div className="hidden md:inline-block">
-                    <StatusBadge status={project.Status}/>
+                    <StatusBadge status={project.ProjectStage}/>
                   </div>
 
-                  {/* Action
-                  <div className="flex justify-end col-span-1 md:col-span-2">
+                
+                  <div className="flex justify-end col-span-1">
                     <button
                       onClick={() => onViewReport(project)}
                       className="flex items-center gap-2 px-4 py-2 font-mono text-xs font-semibold tracking-wide text-white transition-all rounded-lg bg-gray-950 hover:bg-gray-700 active:scale-95"
@@ -261,7 +244,7 @@ function ProgressBar({status}) {
                         <path d="M2 5h6M5.5 2L8 5l-2.5 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </button>
-                  </div>*/}
+                  </div>
                 </div>
               </div>
             ))
@@ -272,6 +255,7 @@ function ProgressBar({status}) {
           Showing {filtered.length} of {projects.length} projects
         </p>
       </main>
+      </div>)}
     </div>
   )
 }

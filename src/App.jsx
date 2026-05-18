@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import LoginPage        from './pages/LoginPage'
 import ProjectMasterPage from './pages/ProjectMasterPage'
-/*import ReportPage       from './pages/ReportPage'*/
+import ReportPage       from './pages/ReportPage'
 
 export default function App() {
   const [page, setPage] = useState('login')   // 'login' | 'projects' | 'report'
@@ -25,18 +25,16 @@ export default function App() {
   }
 
   if (page === 'login')    return <LoginPage onLogin={handleLogin}/>
-  if (page === 'projects') return <ProjectMasterPage onLogout={handleLogout}/>
-  {/*
+  if (page === 'projects') return <ProjectMasterPage onLogout={handleLogout} onViewReport={handleViewReport}/>
   if (page === 'report')   return <ReportPage project={activeProject} onBack={handleBack}/>
-  */}
+  
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<LoginPage onLogin={handleLogin}/>} />
-        <Route path="/projects" element={<ProjectMasterPage onLogout={handleLogout}/>} />
-        {/* <Route path="/report" element={<ReportPage project={activeProject} onBack={handleBack}/>} /> */}
-      </Routes>
+        <Route path="/projects" element={<ProjectMasterPage onLogout={handleLogout} onViewReport={handleViewReport}/>} />
+        <Route path="/report" element={<ReportPage project={activeProject} onBack={handleBack}/>} /> </Routes>
     </BrowserRouter>
   )
 }
