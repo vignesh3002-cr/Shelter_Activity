@@ -33,7 +33,7 @@ export default function LoginPage({ onLogin }) {
       <div className="w-full max-w-md px-8 py-10 bg-gray-100 rounded-2xl animate-fade-up">
 
         {/* Brand */}
-        <div className="flex items-center gap-3 mb-10">
+        <div className="flex items-center gap-3 mb-8">
           <div className="flex items-center justify-center flex-shrink-0 w-12 h-12 bg-white border border-gray-200 shadow-sm rounded-xl">
             {/* Logo mark — S icon */}
             <img src='/Shelter_logo.png' alt="Shelter Logo" className="w-9 h-9"/>
