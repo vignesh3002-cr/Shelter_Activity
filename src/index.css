@@ -44,3 +44,18 @@ body {
   animation: barGrow 0.7s cubic-bezier(0.4,0,0.2,1) both;
   transform-origin: bottom;
 }
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+input[type="password"]::-webkit-textfield-decoration-container {
+  display: none;
+}
+
+input[type="password"]::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  pointer-events: none;
+  display: none !important;
+}
