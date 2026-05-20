@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
-import { CODES, BAR_COLORS, STATUS_STYLES } from '../data/projects'
+//import { useState, useEffect } from 'react'
+//import { CODES, BAR_COLORS, STATUS_STYLES } from '../data/projects'
 
-/* ── Helpers ─────────────────────────────────────────── */
+/* ── Helpers ───────────────────────────────────────────
 function avg(arr) {
   return Math.round(arr.reduce((s, v) => s + v, 0) / arr.length)
 }
@@ -16,7 +16,7 @@ function StatusBadge({ status }) {
   )
 }
 
-/* ── Grouped Bar Chart ───────────────────────────────── */
+/* ── Grouped Bar Chart ───────────────────────────────── 
 function GroupedBarChart({ activities }) {
   const [mounted, setMounted] = useState(false)
   useEffect(() => { const t = setTimeout(() => setMounted(true), 80); return () => clearTimeout(t) }, [])
@@ -58,7 +58,7 @@ function GroupedBarChart({ activities }) {
         style={{ minWidth: 320, height: SVG_H }}
         xmlns="http://www.w3.org/2000/svg"
       >
-        {/* ── Y-axis label (rotated) ── */}
+        {/* ── Y-axis label (rotated) ── 
         <text
           x="10"
           y={TOP_PAD + CHART_H / 2}
@@ -72,7 +72,7 @@ function GroupedBarChart({ activities }) {
           ACTIVITIES
         </text>
 
-        {/* ── Y tick marks + grid lines ── */}
+        {/* ── Y tick marks + grid lines ── 
         {yTicks.map(v => {
           const y = TOP_PAD + CHART_H - scale(v)
           return (
@@ -102,21 +102,21 @@ function GroupedBarChart({ activities }) {
           )
         })}
 
-        {/* ── Y axis line ── */}
+        {/* ── Y axis line ── 
         <line
           x1={Y_AXIS_W} y1={TOP_PAD}
           x2={Y_AXIS_W} y2={TOP_PAD + CHART_H}
           stroke="#C8C8C8" strokeWidth="1"
         />
 
-        {/* ── X axis line (baseline) ── */}
+        {/* ── X axis line (baseline) ──
         <line
           x1={Y_AXIS_W} y1={TOP_PAD + CHART_H}
           x2={totalW - 10} y2={TOP_PAD + CHART_H}
           stroke="#C8C8C8" strokeWidth="1"
         />
 
-        {/* ── Bars (grouped by Code A–E on X-axis, activity per bar in group) ── */}
+        {/* ── Bars (grouped by Code A–E on X-axis, activity per bar in group) ── 
         {CODES.map((code, gi) => (
           <g key={code}>
             {activities.map((act, bi) => {
@@ -128,7 +128,7 @@ function GroupedBarChart({ activities }) {
 
               return (
                 <g key={bi}>
-                  {/* Bar */}
+                  {/* Bar 
                   <rect
                     x={x}
                     y={mounted ? yTop : yBase}
@@ -138,7 +138,7 @@ function GroupedBarChart({ activities }) {
                     fill={BAR_COLORS[bi]}
                     style={{ transition: `y 0.65s cubic-bezier(0.4,0,0.2,1) ${bi * 0.04 + gi * 0.08}s, height 0.65s cubic-bezier(0.4,0,0.2,1) ${bi * 0.04 + gi * 0.08}s` }}
                   />
-                  {/* Score label above bar */}
+                  {/* Score label above bar 
                   <text
                     x={x + BAR_W / 2}
                     y={mounted ? yTop - 2 : yBase - 2}
@@ -154,7 +154,7 @@ function GroupedBarChart({ activities }) {
               )
             })}
 
-            {/* Code label below X-axis */}
+            {/* Code label below X-axis 
             <text
               x={groupX(gi) + groupW / 2}
               y={TOP_PAD + CHART_H + 16}
@@ -169,7 +169,7 @@ function GroupedBarChart({ activities }) {
           </g>
         ))}
 
-        {/* ── X axis title ── */}
+        {/* ── X axis title ── 
         <text
           x={Y_AXIS_W + (totalW - Y_AXIS_W) / 2}
           y={SVG_H - 2}
@@ -187,12 +187,15 @@ function GroupedBarChart({ activities }) {
 }
 
 /* ── Main Report Page ────────────────────────────────── */
-export default function ReportPage({ project, onBack }) {
-  if (!project) return null
+export default function ReportPage({project, onBack}) {
+  {
+  if (!project){
+    return(<div><h1>Project not found</h1></div>)
+  } 
 
-  const { activities } = project
+ 
 
-  // Average per code
+  /*// Average per code
   const codeAvgs = CODES.map(code => ({
     code,
     avg: avg(activities.map(a => a[code]))
@@ -203,10 +206,10 @@ export default function ReportPage({ project, onBack }) {
     ...a,
     total: Math.max(a.A, a.B, a.C, a.D, a.E)
   }))
-
+ */}
   return (
     <div className="min-h-screen bg-gray-100">
-
+        <h1>{project.ProjectName}</h1>
       {/* Top Nav */}
       <header className="sticky top-0 z-20 bg-white border-b border-gray-200">
         <div className="flex items-center justify-between h-16 max-w-5xl px-6 mx-auto">
@@ -221,20 +224,20 @@ export default function ReportPage({ project, onBack }) {
               </svg>
             </button>
             <div>
-              <div className="font-mono text-xs tracking-widest text-gray-400 uppercase">{project.id} · View Report</div>
-              <div className="text-sm font-bold tracking-tight text-gray-900">{project.name}</div>
+              <div className="font-mono text-xs tracking-widest text-gray-400 uppercase">{project.ProjectID} · View Report</div>
+              <div className="text-sm font-bold tracking-tight text-gray-900">{project.ProjectName}</div>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <StatusBadge status={project.status}/>
+            <StatusBadge status={project.ProjectStage}/>
             <div className="flex items-center justify-center w-8 h-8 text-xs font-semibold text-white rounded-full bg-gray-950">JR</div>
           </div>
         </div>
       </header>
-
+{/*
       <main className="max-w-5xl px-6 py-8 mx-auto space-y-5">
 
-        {/* Report header card */}
+        {/* Report header card 
         <div className="p-6 bg-white border border-gray-200 rounded-2xl animate-fade-up">
           <div className="mb-2 font-mono text-xs tracking-widest text-gray-300 uppercase">Activity Report</div>
           <h2 className="mb-1 text-xl font-bold tracking-tight text-gray-950">{project.name}</h2>
@@ -254,7 +257,7 @@ export default function ReportPage({ project, onBack }) {
           </div>
         </div>
 
-        {/* Chart card */}
+        {/* Chart card
         <div className="p-6 bg-white border border-gray-200 rounded-2xl animate-fade-up delay-1">
           <div className="flex items-start justify-between mb-1">
             <div>
@@ -266,7 +269,7 @@ export default function ReportPage({ project, onBack }) {
             <span className="font-mono text-xs tracking-wide text-gray-300">Codes A – E</span>
           </div>
 
-          {/* Axis pills */}
+          {/* Axis pills 
           <div className="flex flex-wrap gap-2 my-4">
             <span className="flex items-center gap-1.5 bg-gray-100 text-gray-500 text-xs font-mono px-3 py-1.5 rounded-full border border-gray-200">
               ↑ Y-axis: <strong className="text-gray-800">Activities</strong>
@@ -278,7 +281,7 @@ export default function ReportPage({ project, onBack }) {
 
           <GroupedBarChart activities={activities}/>
 
-          {/* Legend */}
+          {/* Legend
           <div className="flex flex-wrap gap-2 mt-5">
             {activities.map((act, i) => (
               <div key={i} className="flex items-center gap-1.5 bg-gray-50 border border-gray-200 rounded-full px-3 py-1.5">
@@ -292,7 +295,7 @@ export default function ReportPage({ project, onBack }) {
           </div>
         </div>
 
-        {/* Average score per code */}
+        {/* Average score per code 
         <div className="animate-fade-up delay-2">
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-mono text-sm font-semibold tracking-widest text-gray-900 uppercase">Average Score per Code</h3>
@@ -309,7 +312,7 @@ export default function ReportPage({ project, onBack }) {
           </div>
         </div>
 
-        {/* Activity Score Table */}
+        {/* Activity Score Table 
         <div className="animate-fade-up delay-3">
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-mono text-sm font-semibold tracking-widest text-gray-900 uppercase">Activity Score Table</h3>
@@ -361,7 +364,7 @@ export default function ReportPage({ project, onBack }) {
           </div>
         </div>
 
-      </main>
+      </main> */}
     </div>
   )
 }

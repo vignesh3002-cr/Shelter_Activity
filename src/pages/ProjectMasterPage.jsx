@@ -91,9 +91,7 @@ function ProgressBar({status}) {
     const matchFilter = filter === 'All' || p.ProjectStage === filter
     return matchSearch && matchFilter
   })
-  const logout = () => {
-    onLogout()
-  }
+
   const counts = {
     total: projects.length,
     active: projects.filter(p => p.status === 'Active').length,
@@ -132,7 +130,7 @@ function ProgressBar({status}) {
               JR
             </div>
     
-            <button onClick={logout}
+            <button onClick={onLogout}
               className="text-xs font-mono text-gray-400 hover:text-gray-700 transition-colors px-3 py-1.5 rounded-lg hover:bg-gray-100 border border-gray-200 hover:border-gray-200"
             >
               Sign out
@@ -218,7 +216,7 @@ function ProgressBar({status}) {
                     <span className="py-1 font-mono text-xs text-gray-400 rounded-md ">{project.ProjectID}</span>
                     <div className="text-sm font-semibold text-gray-900">{project.ProjectName}</div>
                     <div className="mt-1.5">
-                      <ProgressBar /*value={project.progress}*/ status={project.status}/>
+                      <ProgressBar /*value={project.progress}*/ status={project.Status}/>
                     </div>
                       {/*<div className="text-xs leading-relaxed text-gray-500">{project.customer}</div>*/}
                   </div>
@@ -236,7 +234,7 @@ function ProgressBar({status}) {
                 
                   <div className="flex justify-end col-span-1">
                     <button
-                      onClick={() => onViewReport(id)}
+                      onClick={() => onViewReport(project)}
                       className="flex items-center gap-2 px-4 py-2 font-mono text-xs font-semibold tracking-wide text-white transition-all rounded-lg bg-gray-950 hover:bg-gray-700 active:scale-95"
                     >
                       View Report
@@ -258,4 +256,5 @@ function ProgressBar({status}) {
       </div>)}
     </div>
   )
+ 
 }

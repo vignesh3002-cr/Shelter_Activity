@@ -115,13 +115,6 @@ export default function LoginPage({ onLogin }) {
           </p>
         )}
 
-          {/* Forgot */}
-          <div className="text-right">
-            <button type="button" className="font-mono text-xs text-gray-400 transition-colors hover:text-gray-600">
-              Forgot password?
-            </button>
-          </div>
-
           {/* Submit */}
           <button
             type="submit"

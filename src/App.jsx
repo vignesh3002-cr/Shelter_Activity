@@ -3,6 +3,7 @@ import LoginPage        from './pages/LoginPage'
 import ProjectMasterPage from './pages/ProjectMasterPage'
 import ReportPage       from './pages/ReportPage'
 
+
 export default function App() {
   const [page, setPage] = useState('login')   // 'login' | 'projects' | 'report'
   const [activeProject, setActive] = useState(null)
@@ -15,8 +16,8 @@ export default function App() {
   }
 
   const handleBack = () => {
-    setPage('projects')
     setActive(null)
+    setPage('projects')
   }
 
   const handleLogout = () => {
@@ -28,13 +29,4 @@ export default function App() {
   if (page === 'projects') return <ProjectMasterPage onLogout={handleLogout} onViewReport={handleViewReport}/>
   if (page === 'report')   return <ReportPage project={activeProject} onBack={handleBack}/>
   
-
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<LoginPage onLogin={handleLogin}/>} />
-        <Route path="/projects" element={<ProjectMasterPage onLogout={handleLogout} onViewReport={handleViewReport}/>} />
-        <Route path="/report" element={<ReportPage project={activeProject} onBack={handleBack}/>} /> </Routes>
-    </BrowserRouter>
-  )
 }
