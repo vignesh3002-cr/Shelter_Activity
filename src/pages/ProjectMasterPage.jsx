@@ -93,10 +93,13 @@ function ProgressBar({status}) {
   })
 
   const counts = {
-    total: projects.length,
-    active: projects.filter(p => p.status === 'Active').length,
-    completed: projects.filter(p => p.status === 'Completed').length,
-    onHold: projects.filter(p => p.status === 'On Hold').length,
+    Total: projects.length,
+    Created: projects.filter(p => p.ProjectStage.toLowerCase() === 'created').length,
+    Completed: projects.filter(p => p.ProjectStage.toLowerCase() === 'completed').length,
+    Estimated: projects.filter(p => p.ProjectStage.toLowerCase() === 'estimated').length,
+    Scheduled: projects.filter(p => p.ProjectStage.toLowerCase() === 'scheduled').length,
+    InProcess: projects.filter(p => p.ProjectStage.toLowerCase() === 'inprocess').length,
+    Finished: projects.filter(p => p.ProjectStage.toLowerCase() === 'finished').length,
   }
   return (
     <div className="min-h-screen bg-gray-100">
@@ -150,10 +153,10 @@ function ProgressBar({status}) {
 
         {/* Stats row*/}
         <div className="grid grid-cols-2 gap-3 mb-6 md:grid-cols-4 animate-fade-up delay-1">
-          {projects.map((project, id) => (
-            <div key={id} className="p-4 bg-white border border-gray-200 rounded-xl">
-              <div className={"text-2xl font-bold tracking-tight text-slate-600" }>{projects.length}</div>
-              <div className="text-sm text-gray-400 mt-0.5 font-mono tracking-wide">{project.ProjectName}</div>
+          {Object.entries(counts).map(([key, value]) => (
+            <div key={key} className="p-4 bg-white border border-gray-200 rounded-xl">
+              <div className={"text-2xl font-bold tracking-tight text-slate-600" }>{value}</div>
+              <div className="text-sm text-gray-400 mt-0.5 font-mono tracking-wide">{key.charAt(0).toUpperCase() + key.slice(1)}</div>
             </div>
           ))}
         </div>

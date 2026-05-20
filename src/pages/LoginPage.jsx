@@ -13,6 +13,11 @@ export default function LoginPage({ onLogin }) {
     e.preventDefault()
     setLoading(true)
     try{
+      if (!UserID || !password) {
+        setError("Please enter both UserID and Password");
+        setLoading(false);
+        return;
+      }
     const res=await axios.post(`${API}/api/auth/login`, { UserID, password });
     console.log(res.data);
  // Adjust based on actual response structure
