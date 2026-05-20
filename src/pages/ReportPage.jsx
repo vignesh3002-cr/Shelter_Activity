@@ -1,13 +1,13 @@
 //import { useState, useEffect } from 'react'
-//import { CODES, BAR_COLORS, STATUS_STYLES } from '../data/projects'
+import { CODES, BAR_COLORS, STATUS_STYLES } from '../data/projects'
 
 /* ── Helpers ───────────────────────────────────────────
 function avg(arr) {
   return Math.round(arr.reduce((s, v) => s + v, 0) / arr.length)
 }
-
+*/
 function StatusBadge({ status }) {
-  const s = STATUS_STYLES[status] || STATUS_STYLES['Planning']
+  const s = STATUS_STYLES[status] || { bg: 'bg-gray-50', text: 'text-gray-500', dot: 'bg-gray-300' }
   return (
     <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-medium tracking-wide uppercase ${s.bg} ${s.text}`}>
       <span className={`w-1.5 h-1.5 rounded-full ${s.dot}`}/>
@@ -209,7 +209,6 @@ export default function ReportPage({project, onBack}) {
  */}
   return (
     <div className="min-h-screen bg-gray-100">
-        <h1>{project.ProjectName}</h1>
       {/* Top Nav */}
       <header className="sticky top-0 z-20 bg-white border-b border-gray-200">
         <div className="flex items-center justify-between h-16 max-w-5xl px-6 mx-auto">

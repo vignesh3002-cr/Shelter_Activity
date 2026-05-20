@@ -92,10 +92,11 @@ export const PROJECTS = [
 ]
 
 export const STATUS_STYLES = {
-  'Active':    { bg: 'bg-emerald-50',  text: 'text-emerald-700',  dot: 'bg-emerald-500' },
-  'Completed': { bg: 'bg-gray-100',    text: 'text-gray-600',     dot: 'bg-gray-400' },
-  'On Hold':   { bg: 'bg-amber-50',    text: 'text-amber-700',    dot: 'bg-amber-500' },
-  'Planning':  { bg: 'bg-blue-50',     text: 'text-blue-700',     dot: 'bg-blue-400' },
+  'InProgress':    { bg: 'bg-emerald-50',  text: 'text-emerald-700',  dot: 'bg-emerald-500' },
+  'Finished': { bg: 'bg-gray-100',    text: 'text-gray-600',     dot: 'bg-gray-400' },
+  'Created':   { bg: 'bg-amber-50',    text: 'text-amber-700',    dot: 'bg-amber-500' },
+  'Scheduled':  { bg: 'bg-blue-50',     text: 'text-blue-700',     dot: 'bg-blue-400' },
+  'Estimated':  { bg: 'bg-purple-50',   text: 'text-purple-700',   dot: 'bg-purple-400' },
 }
 
 export const CODES = ['A', 'B', 'C', 'D', 'E']

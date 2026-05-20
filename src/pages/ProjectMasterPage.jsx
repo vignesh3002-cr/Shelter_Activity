@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-
+import { CODES, BAR_COLORS, STATUS_STYLES } from '../data/projects'
+  
 
 export default function ProjectMasterPage({ onLogout, onViewReport }) {
 
@@ -48,17 +49,17 @@ function SearchIcon() {
 }
 
 function StatusBadge({ status }) {
-  const s = projects[status] || projects['Planning']
+  const s = STATUS_STYLES[status] || { bg: 'bg-gray-50', text: 'text-gray-500', dot: 'bg-gray-300' }
   return (
-    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-medium tracking-wide uppercase bg-emerald-50 text-emerald-700">
-      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"/>
+    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-medium tracking-wide uppercase ${s.bg} ${s.text}`}>
+      <span className={`w-1.5 h-1.5 rounded-full ${s.dot}`}/>
       {status}
     </span>
   )
 }
 
 
-function ProgressBar({status}) {
+{/*function ProgressBar({status}) {
   const colorMap = {
     'Active': 'bg-emerald-500',
     'Completed': 'bg-gray-700',
@@ -73,11 +74,11 @@ function ProgressBar({status}) {
           //style={{ width: status === 'Active' ? '60%' : status === 'Completed' ? '100%' : status === 'On Hold' ? '30%' : '10%' }}
         />
       </div>
-     {/* <span className="w-8 font-mono text-xs font-medium text-right text-gray-600">{value}%</span>*/}
+      <span className="w-8 font-mono text-xs font-medium text-right text-gray-600">{value}%</span>
     </div>
   )
 }
-
+*/}
  
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('All')
@@ -218,10 +219,10 @@ function ProgressBar({status}) {
                   <div className="row-span-2">
                     <span className="py-1 font-mono text-xs text-gray-400 rounded-md ">{project.ProjectID}</span>
                     <div className="text-sm font-semibold text-gray-900">{project.ProjectName}</div>
-                    <div className="mt-1.5">
-                      <ProgressBar /*value={project.progress}*/ status={project.Status}/>
+                    {/*<div className="mt-1.5">
+                      <ProgressBar value={project.progress} status={project.Status}/>
                     </div>
-                      {/*<div className="text-xs leading-relaxed text-gray-500">{project.customer}</div>*/}
+                     <div className="text-xs leading-relaxed text-gray-500">{project.customer}</div>*/}
                   </div>
 
                   {/* Customer 
