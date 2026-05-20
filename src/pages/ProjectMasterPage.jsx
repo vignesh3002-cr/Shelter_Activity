@@ -51,7 +51,7 @@ function SearchIcon() {
 function StatusBadge({ status }) {
   const s = STATUS_STYLES[status] || { bg: 'bg-gray-50', text: 'text-gray-500', dot: 'bg-gray-300' }
   return (
-    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-medium tracking-wide uppercase ${s.bg} ${s.text}`}>
+    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-center text-xs font-mono font-medium tracking-wide uppercase ${s.bg} ${s.text}`}>
       <span className={`w-1.5 h-1.5 rounded-full ${s.dot}`}/>
       {status}
     </span>
@@ -104,7 +104,7 @@ function StatusBadge({ status }) {
   }
   return (
     <div className="min-h-screen bg-gray-100">
-      {loading && (<div className='flex items-center justify-center h-screen bg-white'><motion.img
+      {loading && (<div className='flex items-center justify-center h-screen bg-gray-100'><motion.img
         className="w-32 h-32 mx-auto"
         src="/Shelter_logo.png"
            animate={{
@@ -194,10 +194,10 @@ function StatusBadge({ status }) {
         {/* Table header */}
         <div className="px-5 py-3 border border-gray-200 bg-gray-50 rounded-t-xl animate-fade-up delay-2">
           <div className="grid justify-between grid-cols-2 md:grid-cols-3">
-            <span className="font-mono text-xs tracking-widest text-gray-400 ">Project Name</span>
-            <span className="hidden font-mono text-xs tracking-widest text-gray-400">Customer</span>
-            <span className="hidden font-mono text-xs tracking-widest text-gray-400 md:inline-block">Status</span>
-            <span className="font-mono text-xs tracking-widest text-right text-gray-400 ">Action</span>
+            <span className="font-mono text-xs font-semibold tracking-widest text-gray-800">Project Name</span>
+            <span className="hidden font-mono text-xs font-semibold tracking-widest text-gray-800">Customer</span>
+            <span className="hidden font-mono text-xs font-semibold tracking-widest text-center text-gray-800 md:inline-block">Status</span>
+            <span className="font-mono text-xs font-semibold tracking-widest text-right text-gray-800 ">Action</span>
           </div>
         </div>
 
@@ -231,8 +231,8 @@ function StatusBadge({ status }) {
                   </div>*/}
 
                   {/* Status */}
-                  <div className="hidden md:inline-block">
-                    <StatusBadge status={project.ProjectStage}/>
+                  <div className="justify-center hidden md:flex">
+                    <StatusBadge status={project.ProjectStage} className="text-center"/>
                   </div>
 
                 
