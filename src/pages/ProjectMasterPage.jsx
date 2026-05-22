@@ -9,6 +9,8 @@ export default function ProjectMasterPage({ onLogout, onViewReport }) {
   const [projects, setProjects] = useState([]);
   const [projectListed, setProjectListed] = useState(false);
   const [loading, setLoading] = useState(true);
+  const username = localStorage.getItem("username");
+  const initials = username?.substring(0, 2).toUpperCase();
   const API = import.meta.env.VITE_API_URL;
   useEffect(() => {
 
@@ -131,7 +133,7 @@ function StatusBadge({ status }) {
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center justify-center w-8 h-8 text-xs font-semibold text-white rounded-full bg-gray-950">
-              JR
+              {initials}
             </div>
     
             <button onClick={onLogout}

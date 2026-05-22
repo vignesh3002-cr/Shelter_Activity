@@ -1,6 +1,6 @@
-//import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { CODES, BAR_COLORS, STATUS_STYLES } from '../data/projects'
-
+import axios from 'axios';
 /* ── Helpers ───────────────────────────────────────────
 function avg(arr) {
   return Math.round(arr.reduce((s, v) => s + v, 0) / arr.length)
@@ -188,30 +188,50 @@ function GroupedBarChart({ activities }) {
 
 /* ── Main Report Page ────────────────────────────────── */
 export default function ReportPage({project, onBack}) {
+  const [activities, setActivities] = useState([]);
+  const [columns, setColumns] = useState([]);
+  const API = import.meta.env.VITE_API_URL;
+  
   {
   if (!project){
     return(<div><h1>Project not found</h1></div>)
   } 
+  useEffect(() => {
+    const fetchProjectDetails = async () => {
+      try {
+        const response = await axios.get(`${API}/project-details/${project.ProjectID}`);
+        console.log("Project details response:", response.data);
+        setActivities(response.data);
+        // Extract column names from the first activity object
+        if (response.data.length > 0) {
+          setColumns(Object.keys(response.data[0]).slice(1)); // Exclude the 'name' column
+        } 
+      }
+      catch (error) {
+        console.error("Error fetching project details:", error);
+      }
+    };
 
- 
+    fetchProjectDetails();
+  }, [project.ProjectID]);  
 
   /*// Average per code
   const codeAvgs = CODES.map(code => ({
     code,
     avg: avg(activities.map(a => a[code]))
   }))
-
+ */}
   // Max score per activity
   const actTotals = activities.map(a => ({
     ...a,
     total: Math.max(a.A, a.B, a.C, a.D, a.E)
   }))
- */}
+
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Top Nav */}
       <header className="sticky top-0 z-20 bg-white border-b border-gray-200">
-        <div className="flex items-center justify-between h-16 max-w-5xl px-6 mx-auto">
+        <div className="flex items-center justify-between h-16 max-w-full px-8 mx-auto">
           <div className="flex items-center gap-3">
             <button
               onClick={onBack}
@@ -225,6 +245,7 @@ export default function ReportPage({project, onBack}) {
             <div>
               <div className="font-mono text-xs tracking-widest text-gray-400 uppercase">{project.ProjectID} · View Report</div>
               <div className="text-sm font-bold tracking-tight text-gray-900">{project.ProjectName}</div>
+              <div className="text-xs text-gray-800 tracking-wide mt-0.5"> {activities[0]?.UpdatedBy}</div>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -233,16 +254,16 @@ export default function ReportPage({project, onBack}) {
           </div>
         </div>
       </header>
-{/*
-      <main className="max-w-5xl px-6 py-8 mx-auto space-y-5">
+ 
+      <main className="px-6 py-8 mx-auto space-y-5">
 
-        {/* Report header card 
+       {/*Report header card */}
         <div className="p-6 bg-white border border-gray-200 rounded-2xl animate-fade-up">
           <div className="mb-2 font-mono text-xs tracking-widest text-gray-300 uppercase">Activity Report</div>
-          <h2 className="mb-1 text-xl font-bold tracking-tight text-gray-950">{project.name}</h2>
+          <h2 className="mb-1 text-xl font-bold tracking-tight text-gray-950">{project.ProjectName}</h2>
           <div className="flex items-center gap-3 mb-4">
-            <StatusBadge status={project.status}/>
-            <span className="text-xs text-gray-400">Customer: {project.customer}</span>
+            <StatusBadge status={project.ProjectStage}/>
+            {/*<span className="text-xs text-gray-400">Customer: {project.CustomerName}</span>*/}
           </div>
           <div className="flex items-center gap-3">
             <span className="flex-shrink-0 font-mono text-xs text-gray-400 w-28">Overall Progress</span>
@@ -309,61 +330,38 @@ export default function ReportPage({project, onBack}) {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
 
-        {/* Activity Score Table 
+         {/*Activity Score Table */}
         <div className="animate-fade-up delay-3">
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-mono text-sm font-semibold tracking-widest text-gray-900 uppercase">Activity Score Table</h3>
             <span className="font-mono text-xs text-gray-300">Codes A – E</span>
           </div>
           <div className="overflow-hidden bg-white border border-gray-200 rounded-2xl">
-            <table className="w-full" style={{ tableLayout: 'fixed', borderCollapse: 'collapse' }}>
-              <colgroup>
-                <col style={{ width: 'auto' }}/>
-                {CODES.map(c => <col key={c} style={{ width: '52px' }}/>)}
-                <col style={{ width: '56px' }}/>
-              </colgroup>
+            <table style={{ tableLayout: 'fixed', borderCollapse: 'collapse' }}>
               <thead>
                 <tr className="border-b border-gray-200 bg-gray-50">
-                  <th className="px-5 py-3 font-mono text-xs font-medium tracking-widest text-left text-gray-400 uppercase">
-                    Activity
-                  </th>
-                  {CODES.map(c => (
-                    <th key={c} className="py-3 font-mono text-xs font-medium tracking-widest text-center text-gray-400 uppercase">
-                      {c}
+                 {columns.map(col => (
+                    <th
+                      key={col}
+                      className="px-5 py-3 font-mono text-xs font-medium tracking-widest text-left text-gray-400 uppercase"
+                    >
+                      {col}
                     </th>
                   ))}
-                  <th className="py-3 pr-5 font-mono text-xs font-semibold tracking-widest text-center text-gray-600 uppercase">
-                    Total
-                  </th>
                 </tr>
               </thead>
               <tbody>
-                {actTotals.map((act, i) => (
-                  <tr
-                    key={i}
-                    className="transition-colors border-b border-gray-100 last:border-0 hover:bg-gray-50"
-                  >
-                    <td className="px-5 py-3 overflow-hidden text-sm font-medium text-gray-700 whitespace-nowrap text-ellipsis">
-                      {act.name}
-                    </td>
-                    {CODES.map(c => (
-                      <td key={c} className="py-3 font-mono text-xs font-medium text-center text-gray-800">
-                        {act[c]}
-                      </td>
-                    ))}
-                    <td className="py-3 pr-5 font-mono text-xs font-bold text-center text-gray-950">
-                      {act.total}
-                    </td>
-                  </tr>
-                ))}
+               
               </tbody>
             </table>
           </div>
         </div>
 
-      </main> */}
+        
+                  
+      </main> 
     </div>
   )
 }
