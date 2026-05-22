@@ -26,6 +26,7 @@ export default function LoginPage({ onLogin }) {
     console.log(res.data);
  // Adjust based on actual response structure
     if(res.data["Login status"] ==="YES"){
+      localStorage.setItem("username", UserID);
       onLogin()
     }else{
       setError("Invalid UserID or Password");
