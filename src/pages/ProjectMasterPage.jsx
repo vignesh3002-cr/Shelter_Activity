@@ -98,7 +98,6 @@ function StatusBadge({ status }) {
   const counts = {
     Total: projects.length,
     Created: projects.filter(p => p.ProjectStage.toLowerCase() === 'created').length,
-    Completed: projects.filter(p => p.ProjectStage.toLowerCase() === 'completed').length,
     Estimated: projects.filter(p => p.ProjectStage.toLowerCase() === 'estimated').length,
     Scheduled: projects.filter(p => p.ProjectStage.toLowerCase() === 'scheduled').length,
     InProcess: projects.filter(p => p.ProjectStage.toLowerCase() === 'inprocess').length,
@@ -158,7 +157,7 @@ function StatusBadge({ status }) {
         <div className="grid grid-cols-2 gap-3 mb-6 md:grid-cols-4 animate-fade-up delay-1">
           {Object.entries(counts).map(([key, value]) => (
             <div key={key} className="p-4 bg-white border border-gray-200 rounded-xl">
-              <div className={"text-2xl font-bold tracking-tight text-slate-600" }>{value}</div>
+              <div className={`text-2xl font-bold tracking-tight${key === 'Finished' ? ' text-green-500' : key === 'Estimated' ? ' text-blue-500' : key === 'Created' ? ' text-yellow-500' : key === 'InProcess' ? ' text-purple-500' : key === 'Scheduled' ? ' text-red-500' : ' text-gray-500'}`}>{value}</div>
               <div className="text-sm text-gray-400 mt-0.5 font-mono tracking-wide">{key.charAt(0).toUpperCase() + key.slice(1)}</div>
             </div>
           ))}
@@ -196,10 +195,10 @@ function StatusBadge({ status }) {
         {/* Table header */}
         <div className="px-5 py-3 border border-gray-200 bg-gray-50 rounded-t-xl animate-fade-up delay-2">
           <div className="grid justify-between grid-cols-2 md:grid-cols-3">
-            <span className="font-mono text-xs font-semibold tracking-widest text-gray-800">Project Name</span>
-            <span className="hidden font-mono text-xs font-semibold tracking-widest text-gray-800">Customer</span>
-            <span className="hidden font-mono text-xs font-semibold tracking-widest text-center text-gray-800 md:inline-block">Status</span>
-            <span className="font-mono text-xs font-semibold tracking-widest text-right text-gray-800 ">Action</span>
+            <span className="font-mono text-lg font-semibold tracking-widest text-gray-800">Project_Name</span>
+            <span className="hidden font-mono text-lg font-semibold tracking-widest text-gray-800">Customer</span>
+            <span className="hidden font-mono text-lg font-semibold tracking-widest text-center text-gray-800 md:inline-block">Status</span>
+            <span className="font-mono text-lg font-semibold tracking-widest text-right text-gray-800">Action</span>
           </div>
         </div>
 
@@ -220,7 +219,7 @@ function StatusBadge({ status }) {
                   {/* Name */}
                   <div className="row-span-2">
                     <span className="py-1 font-mono text-xs text-gray-400 rounded-md ">{project.ProjectID}</span>
-                    <div className="text-sm font-semibold text-gray-900">{project.ProjectName}</div>
+                    <div className="text-xs font-semibold text-gray-900">{project.ProjectName}</div>
                     {/*<div className="mt-1.5">
                       <ProgressBar value={project.progress} status={project.Status}/>
                     </div>

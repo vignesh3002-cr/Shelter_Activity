@@ -190,6 +190,8 @@ function GroupedBarChart({ activities }) {
 export default function ReportPage({project, onBack}) {
   const [activities, setActivities] = useState([]);
   const [columns, setColumns] = useState([]);
+  const username = localStorage.getItem('username') || 'Unknown User';
+  const initials=username?.substring(0,2).toUpperCase();
   const API = import.meta.env.VITE_API_URL;
   
   {
@@ -250,7 +252,7 @@ export default function ReportPage({project, onBack}) {
           </div>
           <div className="flex items-center gap-3">
             <StatusBadge status={project.ProjectStage}/>
-            <div className="flex items-center justify-center w-8 h-8 text-xs font-semibold text-white rounded-full bg-gray-950">JR</div>
+            <div className="flex items-center justify-center w-8 h-8 text-xs font-semibold text-white rounded-full bg-gray-950">{initials}</div>
           </div>
         </div>
       </header>
