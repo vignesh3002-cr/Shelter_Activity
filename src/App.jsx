@@ -2,6 +2,7 @@ import { useState } from 'react'
 import LoginPage        from './pages/LoginPage'
 import ProjectMasterPage from './pages/ProjectMasterPage'
 import ReportPage       from './pages/ReportPage'
+import SiteActivityPage from './pages/SiteActivityPage'
 
 
 export default function App() {
@@ -13,6 +14,9 @@ export default function App() {
   const handleViewReport = (project) => {
     setActive(project)
     setPage('report')
+  }
+  const handleUpload = () => {
+    setPage('site-activity')
   }
 
   const handleBack = () => {
@@ -27,6 +31,7 @@ export default function App() {
 
   if (page === 'login')    return <LoginPage onLogin={handleLogin}/>
   if (page === 'projects') return <ProjectMasterPage onLogout={handleLogout} onViewReport={handleViewReport}/>
-  if (page === 'report')   return <ReportPage project={activeProject} onBack={handleBack}/>
-  
+  if (page === 'report')   return <ReportPage project={activeProject} onBack={handleBack} toUpload={handleUpload}/>
+  if (page === 'site-activity') return <SiteActivityPage />
+
 }

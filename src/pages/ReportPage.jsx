@@ -187,12 +187,12 @@ function GroupedBarChart({ activities }) {
 }
 
 /* ── Main Report Page ────────────────────────────────── */
-export default function ReportPage({project, onBack}) {
+export default function ReportPage({project, onBack, toUpload}) {
   const [activities, setActivities] = useState([]);
   const [columns, setColumns] = useState([]);
   const username = localStorage.getItem('username') || 'Unknown User';
   const initials=username?.substring(0,2).toUpperCase();
-  const API = import.meta.env.VITE_API_URL;
+  //const API = import.meta.env.VITE_API_URL;
   
   {
   if (!project){
@@ -201,7 +201,7 @@ export default function ReportPage({project, onBack}) {
   useEffect(() => {
     const fetchProjectDetails = async () => {
       try {
-        const response = await axios.get(`${API}/project-details/${project.ProjectID}`);
+        const response = await axios.get(`http://localhost:5000/api/project-details/${project.ProjectID}`);
         console.log("Project details response:", response.data);
         setActivities(response.data);
         // Extract column names from the first activity object
@@ -338,7 +338,9 @@ export default function ReportPage({project, onBack}) {
         <div className="animate-fade-up delay-3">
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-mono text-sm font-semibold tracking-widest text-gray-900 uppercase">Activity Score Table</h3>
-            <span className="font-mono text-xs text-gray-300">Codes A – E</span>
+            <button className="font-mono text-xs text-gray-300 cursor-pointer" onClick={toUpload}>
+              To Upload
+            </button>
           </div>
           <div className="overflow-hidden bg-white border border-gray-200 rounded-2xl">
             <table style={{ tableLayout: 'fixed', borderCollapse: 'collapse' }}>
