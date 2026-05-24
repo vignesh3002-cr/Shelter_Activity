@@ -79,7 +79,7 @@ const ImageUpload = () => {
         alert("Upload Failed");
       }
     };
-
+};
   return (
     <div>
         <h1>
@@ -123,5 +123,5 @@ const ImageUpload = () => {
     </div>
     </div>
   );
-};
+
 }

@@ -7,7 +7,6 @@ import { CODES, BAR_COLORS, STATUS_STYLES } from '../data/projects'
 export default function ProjectMasterPage({ onLogout, onViewReport }) {
 
   const [projects, setProjects] = useState([]);
-  const [projectListed, setProjectListed] = useState(false);
   const [loading, setLoading] = useState(true);
   const username = localStorage.getItem("username");
   const initials = username?.substring(0, 2).toUpperCase();
@@ -26,7 +25,6 @@ export default function ProjectMasterPage({ onLogout, onViewReport }) {
 
         setProjects(res.data);
         setLoading(false);
-        setProjectListed(true);
       } catch (error) {
 
         console.error(
@@ -119,7 +117,7 @@ function StatusBadge({ status }) {
    ></motion.img></div>)}
       {/* Top Nav */}
 
-   {projectListed && (<div><header className="sticky top-0 z-20 bg-white border-b border-gray-200">
+   { !loading && (<div><header className="sticky top-0 z-20 bg-white border-b border-gray-200">
         <div className="flex items-center justify-between h-16 max-w-6xl px-2 mx-auto md:px-6">
           <div className="flex items-center gap-3">
             <div className="flex items-center justify-center w-8 h-8 bg-white rounded-lg">
