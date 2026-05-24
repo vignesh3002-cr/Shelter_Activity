@@ -195,7 +195,7 @@ export default function ReportPage({project, onBack, toUpload}) {
   const username = localStorage.getItem('username') || 'Unknown User';
   const initials=username?.substring(0,2).toUpperCase();
 
-  //const API = import.meta.env.VITE_API_URL;
+  const API = import.meta.env.VITE_API_URL;
   
   {
   if (!project){
@@ -204,7 +204,7 @@ export default function ReportPage({project, onBack, toUpload}) {
   useEffect(() => {
     const fetchProjectDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/project-details/${project.ProjectID}`);
+        const response = await axios.get(`${API}/api/project-details/${project.ProjectID}`);
         console.log("Project details response:", response.data);
         setActivities(response.data);
         setLoading(false);
