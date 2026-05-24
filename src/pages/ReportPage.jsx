@@ -279,10 +279,7 @@ export default function ReportPage({project, onBack, toUpload}) {
         <div className="p-6 bg-white border border-gray-200 rounded-2xl animate-fade-up">
           <div className="mb-2 font-mono text-xs tracking-widest text-gray-300 uppercase">Activity Report By,</div>
           <h2 className="mb-1 text-xl font-bold tracking-tight text-gray-950">{activities[0]?.UpdatedBy}</h2>
-          <div className="flex items-center gap-3 mb-4">
-            <StatusBadge status={project.ProjectStage}/>
-            {/*<span className="text-xs text-gray-400">Customer: {project.CustomerName}</span>*/}
-          </div>
+
         {/*  <div className="flex items-center gap-3">
             <span className="flex-shrink-0 font-mono text-xs text-gray-400 w-28">Overall Progress</span>
            <div className="flex-1 h-2 overflow-hidden bg-gray-100 rounded-full">
