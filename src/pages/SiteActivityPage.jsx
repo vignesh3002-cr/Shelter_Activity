@@ -182,9 +182,9 @@ setImages(filteredImages);
 
                     onClick={onBack}
 
-                    className="flex items-center justify-center w-10 h-10 transition border rounded-lg hover:bg-gray-100"
+                    className="flex items-center justify-center w-10 h-10 border rounded-lg item hover:bg-gray-100"
                   >
-                    ←
+                    <svg className="ml-2" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#1f1f1f"><path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z"/></svg>
                   </button>
 
                   <div>
@@ -307,7 +307,7 @@ setImages(filteredImages);
 
                           {/* IMAGE */}
 
-                          <div className="relative overflow-hidden h-72 bg-gray-100">
+                          <div className="relative overflow-hidden bg-gray-100 h-72">
 
                             {
                               imageSrc ? (

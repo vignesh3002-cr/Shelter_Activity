@@ -5,6 +5,8 @@ import axios from 'axios'
 export default function LoginPage({ onLogin }) {
   const [UserID, setUserID]       = useState('')
   const [password, setPassword] = useState('')
+  const isValid = password.length >= 8;
+  const isTouched = password.length > 0;
   const [showPw, setShowPw]     = useState(false)
   const [loading, setLoading]   = useState(false)
   const[error,setError] = useState('')
@@ -13,10 +15,18 @@ export default function LoginPage({ onLogin }) {
     e.preventDefault()
     setLoading(true)
     try{
+      if (!UserID || !password) {
+        if(!UserID) setError("Please enter UserID.");
+        else if(!password) setError("Please enter Password.");
+        setLoading(false);
+        return;
+      }
+
     const res=await axios.post(`${API}/api/auth/login`, { UserID, password });
     console.log(res.data);
  // Adjust based on actual response structure
     if(res.data["Login status"] ==="YES"){
+      localStorage.setItem("username", UserID);
       onLogin()
     }else{
       setError("Invalid UserID or Password");
@@ -33,7 +43,7 @@ export default function LoginPage({ onLogin }) {
       <div className="w-full max-w-md px-8 py-10 bg-gray-100 rounded-2xl animate-fade-up">
 
         {/* Brand */}
-        <div className="flex items-center gap-3 mb-10">
+        <div className="flex items-center gap-3 mb-8">
           <div className="flex items-center justify-center flex-shrink-0 w-12 h-12 bg-white border border-gray-200 shadow-sm rounded-xl">
             {/* Logo mark — S icon */}
             <img src='/Shelter_logo.png' alt="Shelter Logo" className="w-9 h-9"/>
@@ -80,18 +90,34 @@ export default function LoginPage({ onLogin }) {
             <label className="block mb-2 font-mono text-xs tracking-widest text-gray-400">
               Password
             </label>
-            <div className="flex items-center gap-3 px-4 transition-colors bg-white border border-gray-200 rounded-xl h-14 focus-within:border-gray-400">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" className="flex-shrink-0">
+            <div className={`flex items-center gap-3 px-4 transition-colors bg-white border border-gray-200 rounded-xl h-14    ${!isTouched
+              ? "focus-within:border-gray-400"
+              : isValid
+              ? "border-green-500 bg-green-50"
+              : "border-red-500 bg-red-50"
+            }`}>
+              {!isTouched ?              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" className="flex-shrink-0">
                 <rect x="3.5" y="8" width="11" height="8" rx="2" stroke="#ABABAB" strokeWidth="1.4"/>
                 <path d="M6 8V6a3 3 0 016 0v2" stroke="#ABABAB" strokeWidth="1.4" strokeLinecap="round"/>
                 <circle cx="9" cy="12" r="1.2" fill="#ABABAB"/>
-              </svg>
+              </svg> : isValid ? (
+            // ✅ Success icon
+            <svg width="18" height="18" fill="green" viewBox="0 0 24 24">
+              <path d="M20 6L9 17l-5-5" stroke="green" strokeWidth="3" fill="none"/>
+            </svg>
+          ) : (
+            // ❌ Error icon
+            <svg width="18" height="18" fill="red" viewBox="0 0 24 24">
+              <path d="M18 6L6 18M6 6l12 12" stroke="red" strokeWidth="3"/>
+            </svg>
+          )}
+ 
               <input
                 type={showPw ? 'text' : 'password'}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="flex-1 font-sans text-sm text-gray-800 placeholder-gray-300 bg-transparent outline-none"
+                placeholder="Must be 8 characters"
+                className="flex-1 font-sans text-sm text-gray-800 placeholder-gray-300 bg-transparent outline-none no-eye"
               />
               <button type="button" onClick={() => setShowPw(p => !p)} className="flex-shrink-0">
                 {showPw ? (
@@ -110,17 +136,10 @@ export default function LoginPage({ onLogin }) {
             </div>
           </div>
           {error && (
-          <p style={{ color: "red" }}>
+          <p className="px-3 py-2 text-sm font-medium text-red-600 border border-red-200 rounded-lg bg-red-50" >
             {error}
           </p>
         )}
-
-          {/* Forgot */}
-          <div className="text-right">
-            <button type="button" className="font-mono text-xs text-gray-400 transition-colors hover:text-gray-600">
-              Forgot password?
-            </button>
-          </div>
 
           {/* Submit */}
           <button

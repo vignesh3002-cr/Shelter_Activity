@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { STATUS_STYLES } from '../data/projects';
+import { STATUS_STYLES } from '../data/projects.js';
 
 export default function ProjectMasterPage({
   onLogout,
@@ -11,7 +11,8 @@ export default function ProjectMasterPage({
   const [projects, setProjects] = useState([]);
   const [projectListed, setProjectListed] = useState(false);
   const [loading, setLoading] = useState(true);
-
+  const username = localStorage.getItem("username");
+  const initials = username?.substring(0, 2).toUpperCase();
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('All');
 
@@ -222,7 +223,7 @@ export default function ProjectMasterPage({
               <div className="flex items-center gap-4">
 
                 <div className="flex items-center justify-center w-8 h-8 text-xs font-semibold text-white rounded-full bg-gray-950">
-                  JR
+                  {initials}
                 </div>
 
                 <button
@@ -264,7 +265,7 @@ export default function ProjectMasterPage({
                   className="p-4 bg-white border border-gray-200 rounded-xl"
                 >
 
-                  <div className="text-2xl font-bold text-slate-700">
+                  <div className={`text-2xl font-bold ${key==="Total"?"text-slate-500":key==="Created"?"text-purple-500":key==="Estimated"?"text-blue-500":key==="Scheduled"?"text-red-500":key==="InProcess"?"text-yellow-500":key==="Finished"?"text-green-500":""}`}>
                     {value}
                   </div>
 
@@ -323,11 +324,11 @@ export default function ProjectMasterPage({
             <div className="overflow-hidden bg-white border border-gray-200 rounded-xl">
 
               {/* HEADER */}
-              <div className="grid grid-cols-4 px-5 py-4 text-xs font-bold tracking-widest text-gray-700 uppercase border-b border-gray-200 bg-gray-50">
+              <div className="grid grid-cols-2 px-5 py-4 text-xs font-bold tracking-widest text-gray-700 uppercase border-b border-gray-200 md:grid-cols-4 bg-gray-50">
 
                 <span>Project ID</span>
-                <span>Project Name</span>
-                <span>Status</span>
+                <span className="hidden md:block">Project Name</span>
+                <span className="hidden md:block">Status</span>
                 <span className="text-right">Action</span>
 
               </div>
@@ -345,18 +346,18 @@ export default function ProjectMasterPage({
 
                   <div
                     key={index}
-                    className="grid grid-cols-4 gap-4 px-5 py-4 border-b border-gray-100 hover:bg-gray-50"
+                    className="grid grid-cols-2 gap-4 px-5 py-4 border-b border-gray-100 md:grid-cols-4 hover:bg-gray-50"
                   >
 
                     <div className="font-mono text-sm text-gray-700">
                       {project.ProjectID}
                     </div>
 
-                    <div className="text-sm font-semibold text-gray-900">
+                    <div className="hidden text-sm font-semibold text-gray-900 md:block ">
                       {project.ProjectName}
                     </div>
 
-                    <div>
+                    <div className="hidden md:block">
                       <StatusBadge
                         status={project.ProjectStage}
                       />
