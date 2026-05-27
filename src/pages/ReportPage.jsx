@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { CODES, BAR_COLORS, STATUS_STYLES } from '../data/projects'
-import { motion } from 'framer-motion'
 import axios from 'axios';
 /* ── Helpers ───────────────────────────────────────────
 function avg(arr) {
@@ -188,30 +187,19 @@ function GroupedBarChart({ activities }) {
 }
 
 /* ── Main Report Page ────────────────────────────────── */
-export default function ReportPage({project, onBack, toUpload}) {
+export default function ReportPage({project, onBack}) {
   const [activities, setActivities] = useState([]);
-  const [columns, setColumns] = useState([]);
-  const[loading, setLoading] = useState(true);
-  const username = localStorage.getItem('username') || 'Unknown User';
-  const initials=username?.substring(0,2).toUpperCase();
-
-  const API = import.meta.env.VITE_API_URL;
-  
   {
   if (!project){
     return(<div><h1>Project not found</h1></div>)
   } 
+  const API = import.meta.env.VITE_API_URL;
   useEffect(() => {
     const fetchProjectDetails = async () => {
       try {
         const response = await axios.get(`${API}/api/project-details/${project.ProjectID}`);
         console.log("Project details response:", response.data);
         setActivities(response.data);
-        setLoading(false);
-        // Extract column names from the first activity object
-        if (response.data.length > 0) {
-          setColumns(Object.keys(response.data[0]).slice(1)); // Exclude the 'name' column
-        } 
       }
       catch (error) {
         console.error("Error fetching project details:", error);
@@ -226,29 +214,16 @@ export default function ReportPage({project, onBack, toUpload}) {
     code,
     avg: avg(activities.map(a => a[code]))
   }))
- */}
+
   // Max score per activity
   const actTotals = activities.map(a => ({
     ...a,
     total: Math.max(a.A, a.B, a.C, a.D, a.E)
   }))
-
+ */}
   return (
-    <div className="min-h-screen mx-auto bg-gray-100 max-width-7xl">
-      {loading && (<div className='flex items-center justify-center h-screen bg-gray-100'><motion.img
-        className="w-32 h-32 mx-auto"
-        src="/Shelter_logo.png"
-           animate={{
-             scale: [1, 1.2, 1],
-             rotate: [0, 5, -5, 0],
-        }}
-        transition={{
-           duration: 1.5,
-          repeat: Infinity,
-       }}
-   ></motion.img></div>)}
+    <div className="min-h-screen bg-gray-100">
       {/* Top Nav */}
-      {!loading && (<div>
       <header className="sticky top-0 z-20 bg-white border-b border-gray-200">
         <div className="flex items-center justify-between h-16 max-w-full px-8 mx-auto">
           <div className="flex items-center gap-3">
@@ -264,32 +239,36 @@ export default function ReportPage({project, onBack, toUpload}) {
             <div>
               <div className="font-mono text-xs tracking-widest text-gray-400 uppercase">{project.ProjectID} · View Report</div>
               <div className="text-sm font-bold tracking-tight text-gray-900">{project.ProjectName}</div>
+              <div className="text-xs text-gray-800 tracking-wide mt-0.5"> {activities[0]?.UpdatedBy}</div>
             </div>
           </div>
           <div className="flex items-center gap-3">
             <StatusBadge status={project.ProjectStage}/>
-            <div className="flex items-center justify-center w-8 h-8 text-xs font-semibold text-white rounded-full bg-gray-950">{initials}</div>
+            <div className="flex items-center justify-center w-8 h-8 text-xs font-semibold text-white rounded-full bg-gray-950">JR</div>
           </div>
         </div>
       </header>
- 
-      <main className="px-6 py-8 mx-auto space-y-5">
+{/*
+      <main className="max-w-5xl px-6 py-8 mx-auto space-y-5">
 
-       {/*Report header card */}
+        {/* Report header card 
         <div className="p-6 bg-white border border-gray-200 rounded-2xl animate-fade-up">
-          <div className="mb-2 font-mono text-xs tracking-widest text-gray-300 uppercase">Activity Report By,</div>
-          <h2 className="mb-1 text-xl font-bold tracking-tight text-gray-950">{activities[0]?.UpdatedBy}</h2>
-
-        {/*  <div className="flex items-center gap-3">
+          <div className="mb-2 font-mono text-xs tracking-widest text-gray-300 uppercase">Activity Report</div>
+          <h2 className="mb-1 text-xl font-bold tracking-tight text-gray-950">{project.name}</h2>
+          <div className="flex items-center gap-3 mb-4">
+            <StatusBadge status={project.status}/>
+            <span className="text-xs text-gray-400">Customer: {project.customer}</span>
+          </div>
+          <div className="flex items-center gap-3">
             <span className="flex-shrink-0 font-mono text-xs text-gray-400 w-28">Overall Progress</span>
-           <div className="flex-1 h-2 overflow-hidden bg-gray-100 rounded-full">
+            <div className="flex-1 h-2 overflow-hidden bg-gray-100 rounded-full">
               <div
                 className="h-full transition-all duration-1000 bg-gray-900 rounded-full"
                 style={{ width: `${project.progress}%` }}
               />
-              </div>
+            </div>
             <span className="w-8 font-mono text-xs font-semibold text-right text-gray-700">{project.progress}%</span>
-          </div>*/}
+          </div>
         </div>
 
         {/* Chart card
@@ -345,42 +324,53 @@ export default function ReportPage({project, onBack, toUpload}) {
               </div>
             ))}
           </div>
-        </div> */}
+        </div>
 
-         {/*Activity Score Table */}
+        {/* Activity Score Table 
         <div className="animate-fade-up delay-3">
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-mono text-sm font-semibold tracking-widest text-gray-900 uppercase">Activity Score Table</h3>
-            <button className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-medium tracking-wide bg-gray-200 text-gray-700 hover:bg-gray-300" onClick={toUpload}>
-              <span className="opacity-75"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#1f1f1f"><path d="M480-260q75 0 127.5-52.5T660-440q0-75-52.5-127.5T480-620q-75 0-127.5 52.5T300-440q0 75 52.5 127.5T480-260Zm0-80q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29ZM160-120q-33 0-56.5-23.5T80-200v-480q0-33 23.5-56.5T160-760h126l74-80h240l74 80h126q33 0 56.5 23.5T880-680v480q0 33-23.5 56.5T800-120H160Zm0-80h640v-480H638l-73-80H395l-73 80H160v480Zm320-240Z"/></svg></span>
-              <span className="text-sm opacity-75">To Upload</span>
-            </button>
+            <span className="font-mono text-xs text-gray-300">Codes A – E</span>
           </div>
-          <div className="overflow-x-auto bg-white border border-gray-200 rounded-sm">
-            <table style={{ tableLayout: 'fixed', borderCollapse: 'collapse' }}>
+          <div className="overflow-hidden bg-white border border-gray-200 rounded-2xl">
+            <table className="w-full" style={{ tableLayout: 'fixed', borderCollapse: 'collapse' }}>
+              <colgroup>
+                <col style={{ width: 'auto' }}/>
+                {CODES.map(c => <col key={c} style={{ width: '52px' }}/>)}
+                <col style={{ width: '56px' }}/>
+              </colgroup>
               <thead>
                 <tr className="border-b border-gray-200 bg-gray-50">
-                 {columns.map(col => (
-                    <th
-                      key={col}
-                      className="px-5 py-3 font-mono text-xs font-medium tracking-widest text-left text-gray-400 uppercase"
-                    >
-                      {col}
+                  <th className="px-5 py-3 font-mono text-xs font-medium tracking-widest text-left text-gray-400 uppercase">
+                    Activity
+                  </th>
+                  {CODES.map(c => (
+                    <th key={c} className="py-3 font-mono text-xs font-medium tracking-widest text-center text-gray-400 uppercase">
+                      {c}
                     </th>
                   ))}
+                  <th className="py-3 pr-5 font-mono text-xs font-semibold tracking-widest text-center text-gray-600 uppercase">
+                    Total
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {activities.map((act, i) => (
-                  <tr key={i} className="border-b border-gray-100">
-                    {Object.values(act).slice(1).map((val, j) => (
-                      <td
-                        key={j}
-                        className="px-5 py-3 font-mono text-xs text-gray-500"
-                      >
-                        {val}
+                {actTotals.map((act, i) => (
+                  <tr
+                    key={i}
+                    className="transition-colors border-b border-gray-100 last:border-0 hover:bg-gray-50"
+                  >
+                    <td className="px-5 py-3 overflow-hidden text-sm font-medium text-gray-700 whitespace-nowrap text-ellipsis">
+                      {act.name}
+                    </td>
+                    {CODES.map(c => (
+                      <td key={c} className="py-3 font-mono text-xs font-medium text-center text-gray-800">
+                        {act[c]}
                       </td>
                     ))}
+                    <td className="py-3 pr-5 font-mono text-xs font-bold text-center text-gray-950">
+                      {act.total}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -388,11 +378,7 @@ export default function ReportPage({project, onBack, toUpload}) {
           </div>
         </div>
 
-        
-                  
-      </main>
-      </div>
-      )} 
+      </main> */}
     </div>
   )
 }

@@ -1,37 +1,94 @@
-import { useState } from 'react'
-import LoginPage        from './pages/LoginPage'
-import ProjectMasterPage from './pages/ProjectMasterPage'
-import ReportPage       from './pages/ReportPage'
-import SiteActivityPage from './pages/SiteActivityPage'
+import { useState } from 'react';
 
+import LoginPage from './pages/LoginPage';
+
+import ProjectMasterPage
+from './pages/ProjectMasterPage';
+
+import ProjectReportPage
+from './pages/ProjectReportPage';
 
 export default function App() {
-  const [page, setPage] = useState('login')   // 'login' | 'projects' | 'report'
-  const [activeProject, setActive] = useState(null)
 
-  const handleLogin = () => setPage('projects')
+  // login | projects | report
+  const [page, setPage] =
+    useState('login');
 
-  const handleViewReport = (project) => {
-    setActive(project)
-    setPage('report')
-  }
-  const handleUpload = () => {
-    setPage('site-activity')
-  }
+  const [selectedProject,
+  setSelectedProject] =
+    useState(null);
 
+  // LOGIN
+  const handleLogin = () => {
+
+    setPage('projects');
+  };
+
+  // VIEW REPORT
+  const handleViewReport = (
+    project
+  ) => {
+
+    setSelectedProject(project);
+
+    setPage('report');
+  };
+
+  // BACK BUTTON
   const handleBack = () => {
-    setActive(null)
-    setPage('projects')
-  }
 
+    setSelectedProject(null);
+
+    setPage('projects');
+  };
+
+  // LOGOUT
   const handleLogout = () => {
-    setPage('login')
-    setActive(null)
+
+    setSelectedProject(null);
+
+    setPage('login');
+  };
+
+  // LOGIN PAGE
+  if (page === 'login') {
+
+    return (
+      <LoginPage
+        onLogin={handleLogin}
+      />
+    );
   }
 
-  if (page === 'login')    return <LoginPage onLogin={handleLogin}/>
-  if (page === 'projects') return <ProjectMasterPage onLogout={handleLogout} onViewReport={handleViewReport}/>
-  if (page === 'report')   return <ReportPage project={activeProject} onBack={handleBack} toUpload={handleUpload}/>
-  if (page === 'site-activity') return <SiteActivityPage />
+  // PROJECT LIST PAGE
+  if (page === 'projects') {
 
+    return (
+
+      <ProjectMasterPage
+        onLogout={handleLogout}
+        onViewReport={
+          handleViewReport
+        }
+      />
+
+    );
+  }
+
+  // REPORT PAGE
+  if (page === 'report') {
+
+    return (
+
+      <ProjectReportPage
+        selectedProject={
+          selectedProject
+        }
+        onBack={handleBack}
+      />
+
+    );
+  }
+
+  return null;
 }
