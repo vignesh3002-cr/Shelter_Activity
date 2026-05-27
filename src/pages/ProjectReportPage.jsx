@@ -9,6 +9,7 @@ const fieldLabels = {
   DisciplineTypes: "Discipline Type",
 
   UpdatedBy: "Updated By",
+  WorkerId: "Worker ID",
 
   ApprovedQty: "Approved Qty",
   ApprovedPercentage: "Approved %",
@@ -99,6 +100,7 @@ export default function ProjectReportPage({
       DisciplineAction: "",
       DisciplineTypes: "",
       UpdatedBy: "",
+      WorkerId: "000003",
 
       ApprovedQty: 0,
       ApprovedPercentage: 0,
@@ -230,22 +232,25 @@ export default function ProjectReportPage({
     try {
 
       setSaveError("");
+      
+  await axios.post(
 
-      await axios.post(
+  `${API}/api/project-report/create`,
 
-        `${API}/api/project-report/create`,
+  {
 
-        {
+    ...formData,
 
-          ...formData,
+    WorkerId:
+      formData.WorkerId,
 
-          ProjId:
-            selectedProject?.ProjectID,
+    ProjId:
+      selectedProject?.ProjectID,
 
-          ProjDate:
-            selectedDate
-        }
-      );
+    ProjDate:
+      selectedDate
+  }
+);
 
       setShowModal(false);
 
@@ -363,7 +368,7 @@ export default function ProjectReportPage({
 
           await axios.post(
 
-            "http://localhost:5000/api/upload/upload-images",
+            `${API}/api/upload/upload-images`,
 
             formData,
 
@@ -507,6 +512,8 @@ export default function ProjectReportPage({
 
                       UpdatedBy:
                         latest?.UpdatedBy || "",
+                      WorkerId:
+                        latest?.WorkerId || "000003",
 
                       ApprovedQty:
                         latest?.ApprovedQty || 0,
@@ -681,7 +688,7 @@ export default function ProjectReportPage({
 
           reportData.length > 0 && (
 
-            <div className="overflow-x-auto bg-white border border-gray-200 shadow-sm rounded-xl">
+            <div className="overflow-x-auto bg-white border border-gray-200 rounded-xl shadow-sm">
 
               <table className="min-w-full text-sm">
 
@@ -830,7 +837,7 @@ export default function ProjectReportPage({
                       </label>
 
                       <input
-
+                        disabled={key === "WorkerId"}
                         type={
                           typeof formData[key] === "number"
                             ? "number"
