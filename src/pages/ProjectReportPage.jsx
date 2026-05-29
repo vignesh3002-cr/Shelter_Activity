@@ -314,15 +314,22 @@ export default function ProjectReportPage({
 
         try {
 
-          const compressedFile =
-            await imageCompression(
-              file,
-              {
-                maxSizeMB: 1,
-                maxWidthOrHeight: 1920,
-                useWebWorker: true,
-              }
-            );
+         const compressedFile =
+  await imageCompression(file, {
+    maxSizeMB: 0.3,
+    maxWidthOrHeight: 1280,
+    initialQuality: 0.6,
+    useWebWorker: true,
+    fileType: "image/jpeg",
+  });
+  console.log(
+  compressedFile.size / 1024 / 1024,
+  "MB"
+);
+const uniqueFileName =
+  `${selectedProject.ProjectID}-${Date.now()}-${Math.random()
+    .toString(36)
+    .substring(2, 8)}.jpg`;
           
           previewList.push(
 
@@ -334,7 +341,7 @@ export default function ProjectReportPage({
           imageList.push({
 
             imagename:
-              compressedFile.name,
+              uniqueFileName,
 
             projectimage:
               compressedFile,
@@ -473,11 +480,20 @@ export default function ProjectReportPage({
 
     <div className="min-h-screen bg-gray-100">
 
-      {/* HEADER */}
+      {/* HEADER 
 
+            <button
+              onClick={onBack}
+              className="px-4 py-2 text-sm font-medium text-white transition bg-black rounded-lg hover:bg-gray-800"
+            >
+              Back
+            </button>*/}
       <div className="sticky top-0 z-10 bg-white border-b border-gray-200 shadow-sm">
+              <button className="md:hidden h-10 top-2 right-2 flex items-center justify-center absolute w-12 bg-gray-100 border border-gray-400 rounded-lg" onClick={onBack} >
+          <svg  xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M440-240 200-480l240-240 56 56-183 184 183 184-56 56Zm264 0L464-480l240-240 56 56-183 184 183 184-56 56Z"/></svg>
+        </button>
 
-        <div className="flex flex-col gap-4 px-4 py-4 md:flex-row md:items-center md:justify-between md:px-8">
+        <div className="flex flex-col w-full gap-4 px-4 py-4 md:flex-row md:items-center md:justify-between md:px-8">
 
           <div>
 
@@ -493,7 +509,7 @@ export default function ProjectReportPage({
 
             </p>
 
-            <div className="mt-4">
+            <div className="mt-4 flex gap-2 justify-center items-center">
 
               <input
                 type="date"
@@ -505,14 +521,7 @@ export default function ProjectReportPage({
                 }
                 className="px-4 py-2 border border-gray-300 rounded-lg"
               />
-
-            </div>
-
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
-
-            {
+                        {
               selectedDate === today && (
 
                 <button
@@ -592,18 +601,48 @@ export default function ProjectReportPage({
                     setShowModal(true);
                   }}
 
-                  className="px-4 py-2 text-sm font-medium text-white transition bg-blue-600 rounded-lg hover:bg-blue-700"
+                  className="px-4 flex justify-center items-center gap-2 py-2 text-base border border-gray-400 font-medium text-white transition bg-black rounded-lg hover:bg-blue-700"
                 >
-
-                  + New
+                  New
+                  <span><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M760-200v-120H200v120h560Zm0-200v-160H200v160h560Zm0-240v-120H200v120h560ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Z"/></svg></span>
+                  
 
                 </button>
               )
             }
 
+            </div>
+
+          </div>
+          <div className="flex items-center justify-center md:flex-col md:gap-4 md:items-end">
+            <button className="hidden h-10 md:flex items-center justify-center w-12 bg-gray-100 border border-gray-400 rounded-lg" onClick={onBack} >
+          <svg  xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M440-240 200-480l240-240 56 56-183 184 183 184-56 56Zm264 0L464-480l240-240 56 56-183 184 183 184-56 56Z"/></svg>
+        </button>
+
+          <div className="flex flex-wrap items-center  gap-3 mt-4">
+
+            
+
             {/* UPLOAD */}
 
-           {/* UPLOAD ONLY FOR TODAY */}
+         
+            {/* VIEW IMAGES */}
+
+            <button
+
+              onClick={() =>
+                setShowGallery(true)
+              }
+
+              className="px-4 py-2 text-sm font-medium text-black border border-gray-600 bg-gray-100 rounded-lg flex justify-center items-center gap-2"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M120-200q-33 0-56.5-23.5T40-280v-400q0-33 23.5-56.5T120-760h400q33 0 56.5 23.5T600-680v400q0 33-23.5 56.5T520-200H120Zm600-320q-17 0-28.5-11.5T680-560v-160q0-17 11.5-28.5T720-760h160q17 0 28.5 11.5T920-720v160q0 17-11.5 28.5T880-520H720Zm40-80h80v-80h-80v80ZM120-280h400v-400H120v400Zm40-80h320L375-500l-75 100-55-73-85 113Zm560 160q-17 0-28.5-11.5T680-240v-160q0-17 11.5-28.5T720-440h160q17 0 28.5 11.5T920-400v160q0 17-11.5 28.5T880-200H720Zm40-80h80v-80h-80v80Zm-640 0v-400 400Zm640-320v-80 80Zm0 320v-80 80Z"/></svg>
+              View Gallery
+
+            </button>
+
+            {/* BACK */}
+              {/* UPLOAD ONLY FOR TODAY */}
 
 {
   selectedDate === today && (
@@ -614,9 +653,9 @@ export default function ProjectReportPage({
         setUploading(true)
       }
 
-      className="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg hover:bg-black"
+      className="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg hover:bg-black flex justify-center items-center gap-2"
     >
-
+      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="M480-480ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h320v80H200v560h560v-320h80v320q0 33-23.5 56.5T760-120H200Zm40-160h480L570-480 450-320l-90-120-120 160Zm440-320v-80h-80v-80h80v-80h80v80h80v80h-80v80h-80Z"/></svg>
       Upload Images
 
     </button>
@@ -624,34 +663,15 @@ export default function ProjectReportPage({
   )
 }
 
-            {/* VIEW IMAGES */}
 
-            <button
-
-              onClick={() =>
-                setShowGallery(true)
-              }
-
-              className="px-4 py-2 text-sm font-medium text-white bg-green-700 rounded-lg"
-            >
-
-              View Images
-
-            </button>
-
-            {/* BACK */}
-
-            <button
-              onClick={onBack}
-              className="px-4 py-2 text-sm font-medium text-white transition bg-black rounded-lg hover:bg-gray-800"
-            >
-              Back
-            </button>
 
           </div>
+          
+          </div>
+          
 
         </div>
-
+    
       </div>
 
       {/* CONTENT */}
@@ -986,7 +1006,7 @@ export default function ProjectReportPage({
 
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
 
-            <div className="w-full max-w-5xl p-6 bg-white rounded-2xl">
+            <div className="w-full max-w-5xl p-6 overflow-y-auto max-h-[95vh] bg-white rounded-2xl">
 
               <div className="flex items-center justify-between mb-5">
 
@@ -1026,7 +1046,7 @@ export default function ProjectReportPage({
 
           {/* SPINNER */}
           <LoaderCircle
-            className="text-blue-600 animate-spin"
+            className="text-black animate-spin"
             size={50}
           />
 
@@ -1068,7 +1088,7 @@ export default function ProjectReportPage({
                     onClick={
                       uploadImages
                     }
-                    className="px-6 py-3 mt-6 text-white bg-blue-600 rounded-xl"
+                    className="px-6 py-3 mt-6 text-white bg-black rounded-xl hover:bg-gray-800"
                   >
                     Upload To D365
                   </button>

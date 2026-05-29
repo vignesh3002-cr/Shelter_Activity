@@ -228,9 +228,10 @@ export default function ProjectMasterPage({
 
                 <button
                   onClick={onLogout}
-                  className="px-3 py-1.5 text-xs font-mono border border-gray-200 rounded-lg hover:bg-gray-100"
+                  className="px-3 py-1.5 text-xs font-mono border border-gray-200 rounded-lg hover:bg-gray-100 inline-flex justify-center items-center gap-2"
                 >
-                  Sign out
+                  Sign Out
+                  <span><svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#434343"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/></svg></span>
                 </button>
 
               </div>
@@ -324,11 +325,11 @@ export default function ProjectMasterPage({
             <div className="overflow-hidden bg-white border border-gray-200 rounded-xl">
 
               {/* HEADER */}
-              <div className="grid grid-cols-2 px-5 py-4 text-xs font-bold tracking-widest text-gray-700 uppercase border-b border-gray-200 md:grid-cols-4 bg-gray-50">
-
+              <div className="grid grid-cols-2 px-5 py-4 text-xs font-bold tracking-widest text-gray-700 uppercase justify-between border-b border-gray-200 md:grid-cols-4 bg-gray-50">
+ 
                 <span>Project ID</span>
                 <span className="hidden md:block">Project Name</span>
-                <span className="hidden md:block">Status</span>
+                <span className="hidden ml-2 md:block">Status</span>
                 <span className="text-right">Action</span>
 
               </div>
@@ -346,14 +347,14 @@ export default function ProjectMasterPage({
 
                   <div
                     key={index}
-                    className="grid grid-cols-2 gap-4 px-5 py-4 border-b border-gray-100 md:grid-cols-4 hover:bg-gray-50"
+                    className="grid grid-cols-2 px-5 py-4 border-b border-gray-100 md:grid-cols-4 hover:bg-gray-50"
                   >
 
-                    <div className="font-mono text-sm text-gray-700">
+                    <div className="font-mono text-[12px] text-gray-700">
                       {project.ProjectID}
                     </div>
 
-                    <div className="hidden text-sm font-semibold text-gray-900 md:block ">
+                    <div className="hidden text-[12px] font-semibold text-gray-900 md:block ">
                       {project.ProjectName}
                     </div>
 
@@ -369,8 +370,9 @@ export default function ProjectMasterPage({
                         onClick={() =>
                           onViewReport(project)
                         }
-                        className="px-4 py-2 text-xs font-semibold text-white transition-all bg-black rounded-lg hover:bg-gray-800"
+                        className="px-4 py-2 text-[12px] font-semibold text-white transition-all bg-black rounded-lg hover:bg-gray-800 flex justify-center items-center gap-2"
                       >
+                        <span><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M280-280h80v-200h-80v200Zm320 0h80v-400h-80v400Zm-160 0h80v-120h-80v120Zm0-200h80v-80h-80v80ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/></svg></span>
                         View Report
                       </button>
 
