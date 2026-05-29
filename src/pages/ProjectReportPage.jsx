@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import imageCompression from "browser-image-compression";
 import SiteActivityPage from "./SiteActivityPage";
+import SuccessPopup from "./SuccessTick";
+import { LoaderCircle } from "lucide-react";
 
 const fieldLabels = {
 
@@ -74,9 +76,10 @@ export default function ProjectReportPage({
   const [saveError,
   setSaveError] =
     useState("");
-
+  
+  const fileInputRef=useRef(null);
   // IMAGE STATES
-
+ const [imageLoading,setImageLoading]=useState(false)
   const [uploading,
   setUploading] =
     useState(false);
@@ -126,7 +129,8 @@ export default function ProjectReportPage({
       CancelledQty: 0,
       CancelledPercentage: 0
     });
-
+    
+    const [successTick,setSuccess]=useState(false);
   useEffect(() => {
 
     fetchReport();
@@ -226,11 +230,25 @@ export default function ProjectReportPage({
   // =========================================
   // SAVE NEW RECORD
   // =========================================
+  const remove=(id)=>{
+    const after_remove=previewImages.filter((_,index)=>
+      index!==id
+    )
+    setPreviewImages(after_remove);
+     const updatedImages =
+    images.filter((_, index) =>
+      index !== id
+    );
 
+  setImages(updatedImages);
+
+  if(updatedImages.length===0)
+  fileInputRef.current.value = "";
+  }
   const handleSave = async () => {
 
     try {
-
+      setLoading(true);
       setSaveError("");
       
   await axios.post(
@@ -251,7 +269,10 @@ export default function ProjectReportPage({
       selectedDate
   }
 );
-
+      setSuccess(true);
+      setTimeout(()=>{
+        setSuccess(false);
+      },3000)
       setShowModal(false);
 
       fetchReport();
@@ -280,12 +301,13 @@ export default function ProjectReportPage({
 
   const handleImageChange =
     async (e) => {
-
+      
       const files =
         Array.from(e.target.files);
+        setImageLoading(true);
 
       const previewList = [];
-
+      
       const imageList = [];
 
       for (const file of files) {
@@ -301,14 +323,14 @@ export default function ProjectReportPage({
                 useWebWorker: true,
               }
             );
-
+          
           previewList.push(
 
             URL.createObjectURL(
               compressedFile
             )
           );
-
+        
           imageList.push({
 
             imagename:
@@ -327,6 +349,7 @@ export default function ProjectReportPage({
       setPreviewImages(previewList);
 
       setImages(imageList);
+      setImageLoading(false);
     };
 
   // =========================================
@@ -381,9 +404,11 @@ export default function ProjectReportPage({
           );
         }
 
-        alert(
-          "Images Uploaded Successfully"
-        );
+        //alert("Images Uploaded Successfully");
+        setSuccess(true);
+        setTimeout(()=>{
+          setSuccess(false);
+        },3000)
 
         setImages([]);
 
@@ -595,6 +620,7 @@ export default function ProjectReportPage({
       Upload Images
 
     </button>
+    
   )
 }
 
@@ -688,7 +714,7 @@ export default function ProjectReportPage({
 
           reportData.length > 0 && (
 
-            <div className="overflow-x-auto bg-white border border-gray-200 rounded-xl shadow-sm">
+            <div className="overflow-x-auto bg-white border border-gray-200 shadow-sm rounded-xl">
 
               <table className="min-w-full text-sm">
 
@@ -982,6 +1008,7 @@ export default function ProjectReportPage({
               </div>
 
               <input
+                ref={fileInputRef}
                 type="file"
                 accept="image/*"
                 capture="environment"
@@ -990,8 +1017,28 @@ export default function ProjectReportPage({
                   handleImageChange
                 }
               />
+              <p className="mt-2 text-sm text-gray-500">
+  Selected Files: {images.length}
+</p>
+                 {imageLoading && (
 
-              <div className="grid grid-cols-2 gap-4 mt-6 md:grid-cols-3 lg:grid-cols-4">
+        <div className="flex flex-col items-center justify-center mt-8">
+
+          {/* SPINNER */}
+          <LoaderCircle
+            className="text-blue-600 animate-spin"
+            size={50}
+          />
+
+          <p className="mt-3 text-sm text-gray-500">
+            Uploading Images...
+          </p>
+
+        </div>
+
+      )}
+      
+           {!imageLoading && ( <div className="grid grid-cols-2 gap-4 mt-6 md:grid-cols-3 lg:grid-cols-4">
 
                 {
                   previewImages.map(
@@ -999,19 +1046,21 @@ export default function ProjectReportPage({
                       image,
                       index
                     ) => (
-
+                      <div className="relative" key={index}>
+                        <button onClick={()=>remove(index)}><svg className="absolute z-20 cursor-pointer top-1 right-1"  xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EA3323"><path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
+</button>
                       <img
-                        key={index}
                         src={image}
                         alt=""
                         className="object-cover w-full rounded-xl h-52"
                       />
+                      </div>
                     )
                   )
                 }
 
               </div>
-
+           )}
               {
                 images.length > 0 && (
 
@@ -1025,13 +1074,13 @@ export default function ProjectReportPage({
                   </button>
                 )
               }
-
+              
             </div>
 
           </div>
         )
       }
-
+      <SuccessPopup show={successTick}/>
     </div>
   );
 }
