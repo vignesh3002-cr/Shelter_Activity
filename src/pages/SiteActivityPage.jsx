@@ -37,7 +37,7 @@ export default function SiteActivityPage({
   // =========================
   // NO PROJECT
   // =========================
-
+  const API=import.meta.env.VITE_API_URL;
   if (!project) {
 
     return (
@@ -70,7 +70,7 @@ export default function SiteActivityPage({
           const response =
   await axios.get(
 
-    `http://localhost:5000/api/upload/images/${project.ProjectID}`
+    `${API}/api/upload/images/${project.ProjectID}`
 
   );
 
