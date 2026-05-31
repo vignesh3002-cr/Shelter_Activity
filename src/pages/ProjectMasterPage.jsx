@@ -170,7 +170,7 @@ export default function ProjectMasterPage({
 
       {/* LOADING */}
       {loading && (
-        <div className="flex items-center justify-center h-screen bg-gray-100">
+        <div className="flex items-center justify-center h -screen bg-gray-100">
 
           <motion.img
             className="w-32 h-32 mx-auto"
@@ -269,7 +269,7 @@ export default function ProjectMasterPage({
 
                   <div className={`text-2xl font-bold ${key==="Total"?"text-slate-500":key==="Created"?"text-purple-500":key==="Estimated"?"text-blue-500":key==="Scheduled"?"text-red-500":key==="InProcess"?"text-yellow-500":key==="Finished"?"text-green-500":""}`}>
                     {value}
-                  </div>
+                  </div>                                                          
 
                   <div className="mt-1 text-sm text-gray-400">
                     {key}
