@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { STATUS_STYLES } from '../data/projects.js';
@@ -14,8 +14,8 @@ export default function ProjectMasterPage({
   const username = localStorage.getItem("username");
   const initials = username?.substring(0, 2).toUpperCase();
   const [search, setSearch] = useState('');
-  const [filter, setFilter] = useState('All');
-
+  const [filter, setFilter] = useState('Total');
+  const [viewDetails,setViewDetails]=useState(null);
   const API = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
@@ -100,7 +100,7 @@ export default function ProjectMasterPage({
       </span>
     );
   }
-
+  /*
   const statuses = [
     'All',
     'Created',
@@ -108,7 +108,7 @@ export default function ProjectMasterPage({
     'Scheduled',
     'InProcess',
     'Finished'
-  ];
+  ];*/
 
   // SAFE FILTER
   const filtered = Array.isArray(projects)
@@ -133,7 +133,7 @@ export default function ProjectMasterPage({
             .includes(search.toLowerCase());
 
         const matchFilter =
-          filter === 'All' ||
+          filter === 'Total' ||
           projectStage === filter;
 
         return matchSearch && matchFilter;
@@ -263,7 +263,8 @@ export default function ProjectMasterPage({
 
                 <div
                   key={key}
-                  className="p-4 bg-white border border-gray-200 rounded-xl"
+                  className="p-4 bg-white border border-gray-200 cursor-pointer rounded-xl hover:bg-gray-50"
+                  onClick={() => setFilter(key)}
                 >
 
                   <div className={`text-2xl font-bold ${key==="Total"?"text-slate-500":key==="Created"?"text-purple-500":key==="Estimated"?"text-blue-500":key==="Scheduled"?"text-red-500":key==="InProcess"?"text-yellow-500":key==="Finished"?"text-green-500":""}`}>
@@ -281,7 +282,6 @@ export default function ProjectMasterPage({
             </div>
 
             {/* SEARCH + FILTER */}
-            <div className="flex flex-col gap-3 mb-6 md:flex-row">
 
               <div className="flex items-center flex-1 gap-3 px-4 py-3 bg-white border border-gray-200 rounded-xl">
 
@@ -299,38 +299,16 @@ export default function ProjectMasterPage({
 
               </div>
 
-              <div className="flex flex-wrap gap-2 p-2 bg-white border border-gray-200 rounded-xl">
-
-                {statuses.map((s) => (
-
-                  <button
-                    key={s}
-                    onClick={() => setFilter(s)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all ${
-                      filter === s
-                        ? 'bg-black text-white'
-                        : 'text-gray-500 hover:text-black'
-                    }`}
-                  >
-                    {s}
-                  </button>
-
-                ))}
-
-              </div>
-
-            </div>
 
             {/* TABLE */}
             <div className="overflow-hidden bg-white border border-gray-200 rounded-xl">
 
               {/* HEADER */}
-              <div className="grid grid-cols-2 px-5 py-4 text-xs font-bold tracking-widest text-gray-700 uppercase justify-between border-b border-gray-200 md:grid-cols-4 bg-gray-50">
+              <div className="grid justify-between grid-cols-2 px-5 py-4 text-xs font-bold tracking-widest text-gray-700 uppercase border-b border-gray-200 md:grid-cols-3 bg-gray-50">
  
                 <span>Project ID</span>
                 <span className="hidden md:block">Project Name</span>
-                <span className="hidden ml-2 md:block">Status</span>
-                <span className="text-right">Action</span>
+                <span className="text-right">Status</span>
 
               </div>
 
@@ -344,43 +322,124 @@ export default function ProjectMasterPage({
               ) : (
 
                 filtered.map((project, index) => (
+  <React.Fragment key={project.ProjectID}>
 
-                  <div
-                    key={index}
-                    className="grid grid-cols-2 px-5 py-4 border-b border-gray-100 md:grid-cols-4 hover:bg-gray-50"
-                  >
+    {/* ROW */}
+    <div
+      className="grid grid-cols-2 px-5 py-4 border-b border-gray-100 cursor-pointer md:grid-cols-3 hover:bg-gray-50"
+      onClick={() =>
+        setViewDetails(
+          viewDetails?.ProjectID === project.ProjectID
+            ? null
+            : project
+        )
+      }
+    >
+      <div className="font-mono text-[12px] text-gray-700">
+        {project.ProjectID}
+      </div>
 
-                    <div className="font-mono text-[12px] text-gray-700">
-                      {project.ProjectID}
-                    </div>
+      <div className="hidden text-[12px] font-semibold text-gray-900 md:block">
+        {project.ProjectName}
+      </div>
 
-                    <div className="hidden text-[12px] font-semibold text-gray-900 md:block ">
-                      {project.ProjectName}
-                    </div>
+      <div className="flex items-end justify-end">
+        <StatusBadge status={project.ProjectStage} />
+      </div>
 
-                    <div className="hidden md:block">
-                      <StatusBadge
-                        status={project.ProjectStage}
-                      />
-                    </div>
+    </div>
 
-                    <div className="flex justify-end">
+    {/* DETAILS PANEL */}
+    {viewDetails?.ProjectID === project.ProjectID && (
+      <div className="relative px-6 py-5 border-b bg-slate-50 animate-fade-down">
+        <svg className='absolute top-1 right-2 md:right-12' onClick={() =>
+        setViewDetails(
+          viewDetails?.ProjectID === project.ProjectID
+            ? null
+            : project
+        )} xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#999999"><path d="m256-424-56-56 280-280 280 280-56 56-224-223-224 223Z"/></svg>
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3">
 
-                      <button
-                        onClick={() =>
-                          onViewReport(project)
-                        }
-                        className="px-4 py-2 text-[12px] font-semibold text-white transition-all bg-black rounded-lg hover:bg-gray-800 flex justify-center items-center gap-2"
-                      >
-                        <span><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M280-280h80v-200h-80v200Zm320 0h80v-400h-80v400Zm-160 0h80v-120h-80v120Zm0-200h80v-80h-80v80ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/></svg></span>
-                        View Report
-                      </button>
+          <div>
+            <p className="text-xs text-gray-500">
+              Project Manager
+            </p>
+            <p className="text-xs font-semibold">
+              xxxx
+            </p>
+          </div>
 
-                    </div>
+            <div className='md:hidden'>
+            <p className="text-xs text-gray-500">
+              Project Name
+            </p>
+            <p className="text-xs font-semibold">
+              {project.ProjectName}
+            </p>
+          </div>
 
-                  </div>
+          <div>
+            <p className="text-xs text-gray-500">
+              Job Identification
+            </p>
+            <p className="text-xs font-semibold">
+              {project.JobIdentification}
+            </p>
+          </div>
 
-                ))
+          <div>
+            <p className="text-xs text-gray-500">
+              Contract ID
+            </p>
+            <p className="text-xs font-semibold">
+              {project.ProjectContractID}
+            </p>
+          </div>
+
+          <div>
+            <p className="text-xs text-gray-500">
+              Project Group
+            </p>
+            <p className="text-xs font-semibold">
+              {project.ProjectGroup}
+            </p>
+          </div>
+
+          <div>
+            <p className="text-xs text-gray-500">
+              Project Type
+            </p>
+            <p className="text-xs font-semibold">
+              {project.ProjectType}
+            </p>
+          </div>
+
+        </div>
+
+        <div className="flex gap-3 mt-5">
+
+          <button
+            className="flex items-center justify-center gap-2 px-4 py-2 text-sm text-black bg-white border border-gray-400 rounded-lg hover:bg-gray-400"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#000000"><path d="m612-292 56-56-148-148v-184h-80v216l172 172ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/></svg>
+            View Time
+          </button>
+
+          <button
+            onClick={()=>onViewReport(project)}
+            className="flex items-center justify-center gap-2 px-4 py-2 text-sm text-white bg-black border border-gray-200 rounded-lg hover:bg-gray-600"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M280-280h80v-200h-80v200Zm320 0h80v-400h-80v400Zm-160 0h80v-120h-80v120Zm0-200h80v-80h-80v80ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/></svg>
+            View Report
+          </button>
+
+        </div>
+
+      </div>
+    )}
+
+  </React.Fragment>
+))
 
               )}
 
