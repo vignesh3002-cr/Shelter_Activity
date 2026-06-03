@@ -22,39 +22,60 @@ export default function ProjectMasterPage({
 
     const fetchProjects = async () => {
 
-      try {
+  try {
 
-        const res = await axios.get(
-          `${API}/api/projects/my-projects`
-        );
+    const userRecId =
+      localStorage.getItem("userRecId");
 
-        console.log('Fetched projects:', res.data);
+    console.log(
+      "Logged User RecId:",
+      userRecId
+    );
 
-        // IMPORTANT FIX
-        const projectData = Array.isArray(res.data)
-          ? res.data
-          : res.data.value || [];
+    const res = await axios.get(
+      `${API}/api/projects/my-projects`
+    );
 
-        console.log('Final Project Array:', projectData);
+    const projectData =
+      Array.isArray(res.data)
+        ? res.data
+        : res.data.value || [];
 
-        setProjects(projectData);
+    console.log(
+      "Total Projects:",
+      projectData.length
+    );
 
-      } catch (error) {
+    const filteredProjects =
+      projectData.filter(
+        project =>
+          String(project.WorkerResponsible) ===
+          String(userRecId)
+      );
 
-        console.error(
-          'Error fetching projects:',
-          error
-        );
+    console.log(
+      "Filtered Projects:",
+      filteredProjects
+    );
 
-        setProjects([]);
+    setProjects(filteredProjects);
 
-      } finally {
+  } catch (error) {
 
-        setLoading(false);
-        setProjectListed(true);
+    console.error(
+      "Error fetching projects:",
+      error
+    );
 
-      }
-    };
+    setProjects([]);
+
+  } finally {
+
+    setLoading(false);
+    setProjectListed(true);
+
+  }
+};
 
     fetchProjects();
 

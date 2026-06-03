@@ -25,10 +25,18 @@ export default function LoginPage({ onLogin }) {
     const res=await axios.post(`${API}/api/auth/login`, { UserID, password });
     console.log(res.data);
  // Adjust based on actual response structure
-    if(res.data["Login status"] ==="YES"){
-      localStorage.setItem("username", UserID);
-      onLogin()
-    }else{
+    if (res.data["Login status"] === "YES") {
+
+  localStorage.setItem("username", UserID);
+
+  localStorage.setItem(
+    "userRecId",
+    res.data["User RecId"]
+  );
+
+  onLogin();
+
+}else{
       setError("Invalid UserID or Password");
     }
     setLoading(false)
