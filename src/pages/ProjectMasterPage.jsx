@@ -352,7 +352,7 @@ export default function ProjectMasterPage({
     {/* DETAILS PANEL */}
     {viewDetails?.ProjectID === project.ProjectID && (
       <div className="relative px-6 py-5 border-b bg-slate-50 animate-fade-down">
-        <svg className='absolute top-1 right-2 md:right-12' onClick={() =>
+        <svg className='absolute cursor-pointer top-1 right-2 md:right-12' onClick={() =>
         setViewDetails(
           viewDetails?.ProjectID === project.ProjectID
             ? null
