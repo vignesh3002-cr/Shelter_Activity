@@ -22,39 +22,60 @@ export default function ProjectMasterPage({
 
     const fetchProjects = async () => {
 
-      try {
+  try {
 
-        const res = await axios.get(
-          `${API}/api/projects/my-projects`
-        );
+    const userRecId =
+      localStorage.getItem("userRecId");
 
-        console.log('Fetched projects:', res.data);
+    console.log(
+      "Logged User RecId:",
+      userRecId
+    );
 
-        // IMPORTANT FIX
-        const projectData = Array.isArray(res.data)
-          ? res.data
-          : res.data.value || [];
+    const res = await axios.get(
+      `${API}/api/projects/my-projects`
+    );
 
-        console.log('Final Project Array:', projectData);
+    const projectData =
+      Array.isArray(res.data)
+        ? res.data
+        : res.data.value || [];
 
-        setProjects(projectData);
+    console.log(
+      "Total Projects:",
+      projectData.length
+    );
 
-      } catch (error) {
+    const filteredProjects =
+      projectData.filter(
+        project =>
+          String(project.WorkerResponsible) ===
+          String(userRecId)
+      );
 
-        console.error(
-          'Error fetching projects:',
-          error
-        );
+    console.log(
+      "Filtered Projects:",
+      filteredProjects
+    );
 
-        setProjects([]);
+    setProjects(filteredProjects);
 
-      } finally {
+  } catch (error) {
 
-        setLoading(false);
-        setProjectListed(true);
+    console.error(
+      "Error fetching projects:",
+      error
+    );
 
-      }
-    };
+    setProjects([]);
+
+  } finally {
+
+    setLoading(false);
+    setProjectListed(true);
+
+  }
+};
 
     fetchProjects();
 
@@ -170,7 +191,7 @@ export default function ProjectMasterPage({
 
       {/* LOADING */}
       {loading && (
-        <div className="flex items-center justify-center h-screen bg-gray-100">
+        <div className="flex items-center justify-center h -screen bg-gray-100">
 
           <motion.img
             className="w-32 h-32 mx-auto"
@@ -269,7 +290,7 @@ export default function ProjectMasterPage({
 
                   <div className={`text-2xl font-bold ${key==="Total"?"text-slate-500":key==="Created"?"text-purple-500":key==="Estimated"?"text-blue-500":key==="Scheduled"?"text-red-500":key==="InProcess"?"text-yellow-500":key==="Finished"?"text-green-500":""}`}>
                     {value}
-                  </div>
+                  </div>                                                          
 
                   <div className="mt-1 text-sm text-gray-400">
                     {key}
