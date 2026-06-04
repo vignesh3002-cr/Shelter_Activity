@@ -7,12 +7,16 @@ from './pages/ProjectMasterPage';
 
 import ProjectReportPage
 from './pages/ProjectReportPage';
+import TimeManagementPage from './pages/TimeManagement';
 
 export default function App() {
 
   // login | projects | report
   const [page, setPage] =
     useState('login');
+  const[selectedProjectID,
+  setSelectedProjectID] =
+    useState(null);
 
   const [selectedProject,
   setSelectedProject] =
@@ -33,11 +37,15 @@ export default function App() {
 
     setPage('report');
   };
-
+  const handleViewTime = (projectID) => {
+    setSelectedProjectID(projectID);
+    setPage('time');
+  };
   // BACK BUTTON
   const handleBack = () => {
 
     setSelectedProject(null);
+    setSelectedProjectID(null);
 
     setPage('projects');
   };
@@ -46,6 +54,7 @@ export default function App() {
   const handleLogout = () => {
 
     setSelectedProject(null);
+    setSelectedProjectID(null);
 
     setPage('login');
   };
@@ -70,6 +79,7 @@ export default function App() {
         onViewReport={
           handleViewReport
         }
+        onViewTime={handleViewTime}
       />
 
     );
@@ -83,6 +93,21 @@ export default function App() {
       <ProjectReportPage
         selectedProject={
           selectedProject
+        }
+        onBack={handleBack}
+        viewTimeManagement={handleViewTime}
+      />
+
+    );
+  }
+
+  if (page === 'time') {
+
+    return (
+
+      <TimeManagementPage
+        selectedProjectID={
+          selectedProjectID
         }
         onBack={handleBack}
       />
