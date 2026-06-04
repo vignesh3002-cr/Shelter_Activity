@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
+import SuccessPopup from "./SuccessTick";
 export default function TimeManagementPage({ selectedProjectID, onBack }) {
 
     const [timeData, setTimeData] = useState([]);
@@ -8,12 +9,13 @@ export default function TimeManagementPage({ selectedProjectID, onBack }) {
     const [editingRow, setEditingRow] = useState(null);
     const[loading, setLoading] = useState(false);
 const [editedDate, setEditedDate] = useState("");
-
+const API=import.meta.env.VITE_API_URL;
+const [successTick,setSuccess]=useState(false);
     useEffect(() => {
         const fetchTimeData = async () => {
             try {
                 setLoading(true);
-                const response = await axios.post("http://localhost:5000/api/time-management/ViewTime", { projectId: selectedProjectID });
+                const response = await axios.post(`${API}/api/time-management/ViewTime`, { projectId: selectedProjectID });
                 setTimeData(response.data.WBSActivityList);
                 console.log("Fetched Time Data:", response.data.WBSActivityList);
             } catch (error) {
@@ -71,7 +73,7 @@ const handleSubmit = async (
   try {
 
     await axios.post(
-      "http://localhost:5000/api/time-management/update-date",
+      `${API}/api/time-management/update-date`,
       {
         projectId:
           selectedProjectID,
@@ -83,6 +85,10 @@ const handleSubmit = async (
           newDate
       }
     );
+    setSuccess(true);
+     setTimeout(()=>{
+        setSuccess(false);
+      },3000)
 
     const updated =
       [...timeData];
@@ -95,10 +101,8 @@ const handleSubmit = async (
     setTimeData(updated);
 
     setEditingRow(null);
-
-    alert(
-      "Date updated successfully"
-    );
+   
+ 
 
   } catch (error) {
 
@@ -329,6 +333,7 @@ const handleSubmit = async (
 
       </div>
             )}
+            <SuccessPopup show={successTick}/>
     </div>
   );
 }
