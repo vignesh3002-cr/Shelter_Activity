@@ -897,11 +897,11 @@ const uniqueFileName =
     className="w-full p-3 border border-gray-300 rounded-lg transition-all"
   >
     <option value="">Select Discipline Action</option>
-    <option value="Created">Mechanical</option>
-    <option value="Submitted">MET Action</option>
-    <option value="Approved">MET ARCH</option>
-    <option value="Rejected">MET Civil</option>
-    <option value="Pending">ΜΕΤ ΜΕΡ</option>
+    <option value="Mechanical">Mechanical</option>
+    <option value="MET Action">MET Action</option>
+    <option value="MET ARCH">MET ARCH</option>
+    <option value="MET Civil">MET Civil</option>
+    <option value="ΜΕΤ ΜΕΡ">ΜΕΤ ΜΕΡ</option>
   </select>
 
 ) : key === "DisciplineTypes" ? (
