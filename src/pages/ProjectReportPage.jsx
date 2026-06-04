@@ -96,39 +96,39 @@ export default function ProjectReportPage({
   setShowGallery] =
     useState(false);
 
-  const [formData,
-  setFormData] =
-    useState({
+  const [formData, setFormData] = useState({
 
-      DisciplineAction: "",
-      DisciplineTypes: "",
-      UpdatedBy: "",
-      WorkerId: "000003",
+  DisciplineAction: "",
+  DisciplineTypes: "",
 
-      ApprovedQty: 0,
-      ApprovedPercentage: 0,
+  ApprovedQty: 0,
+  ApprovedPercentage: 0,
 
-      DraftQty: 0,
-      DraftPercentage: 0,
+  DraftQty: 0,
+  DraftPercentage: 0,
 
-      RejectedQty: 0,
-      RejectedPercentage: 0,
+  RejectedQty: 0,
+  RejectedPercentage: 0,
 
-      PendingappQty: 0,
-      PendingappPercentage: 0,
+  PendingappQty: 0,
+  PendingappPercentage: 0,
 
-      CreatedQty: 0,
-      CreatedPercentage: 0,
+  CreatedQty: 0,
+  CreatedPercentage: 0,
 
-      ReturnedQty: 0,
-      ReturnedPercentage: 0,
+  ReturnedQty: 0,
+  ReturnedPercentage: 0,
 
-      SubmittedQty: 0,
-      SubmittedPercentage: 0,
+  SubmittedQty: 0,
+  SubmittedPercentage: 0,
 
-      CancelledQty: 0,
-      CancelledPercentage: 0
-    });
+  CancelledQty: 0,
+  CancelledPercentage: 0,
+
+  // MOVE THESE TO LAST
+  UpdatedBy: "",
+  WorkerId: "000003"
+});
     
     const [successTick,setSuccess]=useState(false);
   useEffect(() => {
@@ -538,65 +538,67 @@ const uniqueFileName =
 
                     setFormData({
 
-                      DisciplineAction:
-                        latest?.DisciplineAction || "",
+  DisciplineAction:
+    latest?.DisciplineAction || "",
 
-                      DisciplineTypes:
-                        latest?.DisciplineTypes || "",
+  DisciplineTypes:
+    latest?.DisciplineTypes || "",
 
-                      UpdatedBy:
-                        latest?.UpdatedBy || "",
-                      WorkerId:
-                        latest?.WorkerId || "000003",
+  ApprovedQty:
+    latest?.ApprovedQty || 0,
 
-                      ApprovedQty:
-                        latest?.ApprovedQty || 0,
+  ApprovedPercentage:
+    latest?.ApprovedPercentage || 0,
 
-                      ApprovedPercentage:
-                        latest?.ApprovedPercentage || 0,
+  DraftQty:
+    latest?.DraftQty || 0,
 
-                      DraftQty:
-                        latest?.DraftQty || 0,
+  DraftPercentage:
+    latest?.DraftPercentage || 0,
 
-                      DraftPercentage:
-                        latest?.DraftPercentage || 0,
+  RejectedQty:
+    latest?.RejectedQty || 0,
 
-                      RejectedQty:
-                        latest?.RejectedQty || 0,
+  RejectedPercentage:
+    latest?.RejectedPercentage || 0,
 
-                      RejectedPercentage:
-                        latest?.RejectedPercentage || 0,
+  PendingappQty:
+    latest?.PendingappQty || 0,
 
-                      PendingappQty:
-                        latest?.PendingappQty || 0,
+  PendingappPercentage:
+    latest?.PendingappPercentage || 0,
 
-                      PendingappPercentage:
-                        latest?.PendingappPercentage || 0,
+  CreatedQty:
+    latest?.CreatedQty || 0,
 
-                      CreatedQty:
-                        latest?.CreatedQty || 0,
+  CreatedPercentage:
+    latest?.CreatedPercentage || 0,
 
-                      CreatedPercentage:
-                        latest?.CreatedPercentage || 0,
+  ReturnedQty:
+    latest?.ReturnedQty || 0,
 
-                      ReturnedQty:
-                        latest?.ReturnedQty || 0,
+  ReturnedPercentage:
+    latest?.ReturnedPercentage || 0,
 
-                      ReturnedPercentage:
-                        latest?.ReturnedPercentage || 0,
+  SubmittedQty:
+    latest?.SubmittedQty || 0,
 
-                      SubmittedQty:
-                        latest?.SubmittedQty || 0,
+  SubmittedPercentage:
+    latest?.SubmittedPercentage || 0,
 
-                      SubmittedPercentage:
-                        latest?.SubmittedPercentage || 0,
+  CancelledQty:
+    latest?.CancelledQty || 0,
 
-                      CancelledQty:
-                        latest?.CancelledQty || 0,
+  CancelledPercentage:
+    latest?.CancelledPercentage || 0,
 
-                      CancelledPercentage:
-                        latest?.CancelledPercentage || 0
-                    });
+  // LAST
+  UpdatedBy:
+    latest?.UpdatedBy || "",
+
+  WorkerId:
+    latest?.WorkerId || "000003"
+});
 
                     setShowModal(true);
                   }}
@@ -882,48 +884,80 @@ const uniqueFileName =
 
                       </label>
 
-                      <input
-                        disabled={key === "WorkerId"}
-                        type={
-                          typeof formData[key] === "number"
-                            ? "number"
-                            : "text"
-                        }
+                      {key === "DisciplineAction" ? (
 
-                        value={formData[key]}
+  <select
+    value={formData[key]}
+    onChange={(e) => {
+      setFormData({
+        ...formData,
+        [key]: e.target.value
+      });
+    }}
+    className="w-full p-3 border border-gray-300 rounded-lg transition-all"
+  >
+    <option value="">Select Discipline Action</option>
+    <option value="Created">Mechanical</option>
+    <option value="Submitted">MET Action</option>
+    <option value="Approved">MET ARCH</option>
+    <option value="Rejected">MET Civil</option>
+    <option value="Pending">ΜΕΤ ΜΕΡ</option>
+  </select>
 
-                        onChange={(e) => {
+) : key === "DisciplineTypes" ? (
 
-                          const value =
+  <select
+    value={formData[key]}
+    onChange={(e) => {
+      setFormData({
+        ...formData,
+        [key]: e.target.value
+      });
+    }}
+    className="w-full p-3 border border-gray-300 rounded-lg transition-all"
+  >
+    <option value="">Select Discipline Type</option>
+    <option value="Civil">Civil</option>
+    <option value="Mechanical">Electrical</option>
+    <option value="Electrical">IT</option>
+    <option value="Instrumentation">Mechanical</option>
+  </select>
 
-                            e.target.type === "number"
+) : (
 
-                              ? Number(e.target.value)
+  <input
+    disabled={key === "WorkerId"}
+    type={
+      typeof formData[key] === "number"
+        ? "number"
+        : "text"
+    }
+    value={formData[key]}
+    onChange={(e) => {
 
-                              : e.target.value;
+      const value =
+        e.target.type === "number"
+          ? Number(e.target.value)
+          : e.target.value;
 
-                          setFormData({
+      setFormData({
+        ...formData,
+        [key]: value
+      });
 
-                            ...formData,
+      validateField(
+        key,
+        value
+      );
+    }}
+    className={`w-full p-3 border rounded-lg transition-all ${
+      errors[key]
+        ? "border-red-500 bg-red-50"
+        : "border-gray-300"
+    }`}
+  />
 
-                            [key]: value
-                          });
-
-                          validateField(
-                            key,
-                            value
-                          );
-                        }}
-
-                        className={`w-full p-3 border rounded-lg transition-all
-
-                        ${errors[key]
-
-                          ? "border-red-500 bg-red-50"
-
-                          : "border-gray-300"
-                        }`}
-                      />
+)}
 
                       {
 
