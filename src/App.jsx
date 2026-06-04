@@ -95,7 +95,6 @@ export default function App() {
           selectedProject
         }
         onBack={handleBack}
-        viewTimeManagement={handleViewTime}
       />
 
     );
