@@ -71,7 +71,7 @@ const handleSubmit = async (
 ) => {
 
   try {
-
+    setSuccess(true);
     await axios.post(
       `${API}/api/time-management/update-date`,
       {
@@ -85,7 +85,7 @@ const handleSubmit = async (
           newDate
       }
     );
-    setSuccess(true);
+    
      setTimeout(()=>{
         setSuccess(false);
       },3000)
@@ -135,8 +135,8 @@ const handleSubmit = async (
       
               </div>
             )}
-            {!loading && timeData && (
-      <div className="px-6 py-8 mx-auto max-w-7xl">
+            {!loading && timeData && !successTick && (
+      <div className="px-6 py-8 mx-auto transition duration-300 max-w-7xl">
 
         {/* HEADER */}
         <div className="flex flex-col gap-4 p-5 mb-6 bg-white border border-gray-200 shadow-sm rounded-xl">
@@ -333,7 +333,7 @@ const handleSubmit = async (
 
       </div>
             )}
-            <SuccessPopup show={successTick}/>
+            <SuccessPopup time={successTick}/>
     </div>
   );
 }
