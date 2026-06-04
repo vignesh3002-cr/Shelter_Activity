@@ -64,6 +64,7 @@ export default function ProjectReportPage({
   const [showModal,
   setShowModal] =
     useState(false);
+  const [disciplineActions, setDisciplineActions] = useState([]);
 
   const [previousRecord,
   setPreviousRecord] =
@@ -169,6 +170,31 @@ export default function ProjectReportPage({
     }
   };
 
+  const fetchDisciplineActions = async () => {
+
+  try {
+
+    const projectId =
+      selectedProject?.ProjectID;
+
+    const res = await axios.get(
+  `${API}/api/project-report/activities/${projectId}`
+    );
+
+    const actions =
+      (res.data.Activities || []).map(
+        item => item["Primilinery action"]
+      );
+
+    setDisciplineActions(actions);
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
+
+};
   // =========================================
   // VALIDATION
   // =========================================
@@ -599,7 +625,7 @@ const uniqueFileName =
   WorkerId:
     latest?.WorkerId || "000003"
 });
-
+fetchDisciplineActions();
                     setShowModal(true);
                   }}
 
@@ -896,15 +922,26 @@ const uniqueFileName =
     }}
     className="w-full p-3 border border-gray-300 rounded-lg transition-all"
   >
-    <option value="">Select Discipline Action</option>
-    <option value="Mechanical">Mechanical</option>
-    <option value="MET Action">MET Action</option>
-    <option value="MET ARCH">MET ARCH</option>
-    <option value="MET Civil">MET Civil</option>
-    <option value="ΜΕΤ ΜΕΡ">ΜΕΤ ΜΕΡ</option>
+
+    <option value="">
+      Select Discipline Action
+    </option>
+
+    {disciplineActions.map(
+      (action, index) => (
+        <option
+          key={index}
+          value={action}
+        >
+          {action}
+        </option>
+      )
+    )}
+
   </select>
 
-) : key === "DisciplineTypes" ? (
+)
+: key === "DisciplineTypes" ? (
 
   <select
     value={formData[key]}
