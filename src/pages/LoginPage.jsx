@@ -9,6 +9,7 @@ export default function LoginPage({ onLogin }) {
   const isTouched = password.length > 0;
   const [showPw, setShowPw]     = useState(false)
   const [loading, setLoading]   = useState(false)
+  const[value,setValue] = useState(null)
   const[error,setError] = useState('')
   const API = import.meta.env.VITE_API_URL;
   const handleSubmit = async(e) => {
@@ -24,17 +25,19 @@ export default function LoginPage({ onLogin }) {
 
     const res=await axios.post(`${API}/api/auth/login`, { UserID, password });
     console.log(res.data);
+    setValue(res.data);
  // Adjust based on actual response structure
     if (res.data["Login status"] === "YES") {
 
-  localStorage.setItem("username", UserID);
-
+  localStorage.setItem("usermail",UserID);
+  localStorage.setItem("password",password);
   localStorage.setItem(
-    "userRecId",
-    res.data["User RecId"]
+    "username",
+    res.data["User Name"]
   );
 
-  onLogin();
+
+  onLogin(value);
 
 }else{
       setError("Invalid UserID or Password");

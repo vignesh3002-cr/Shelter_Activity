@@ -16,7 +16,8 @@ export {
   getLoginUser,
   getProjectDetails,
   getImageToD365,
-  getAccessToken
+  getAccessToken,
+  getProjectActivities
 };
 async function getAccessToken() {
     try {
@@ -44,6 +45,44 @@ async function getAccessToken() {
         throw error;
     }
 }
+ const getProjectActivities = async (projectId) => {
+
+  try {
+
+    const token = await getAccessToken();
+
+    const response = await axios.post(
+
+      process.env.PROJECT_ACTIVITY_API,
+
+      {
+        _request: {
+          ProjId: projectId
+        }
+      },
+      
+
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      }
+
+    );
+
+    return response.data;
+
+  } catch (error) {
+
+    console.log(
+      error.response?.data ||
+      error.message
+    );
+
+    throw error;
+  }
+};
 
 async function getProjects() {
 
@@ -90,6 +129,32 @@ async function getLoginUser(UserID, password) {
   response.data
 );
     return response.data;
+}
+export const ResetPassword = async (UserId, newPassword) => {
+    try {
+      const token = await getAccessToken();
+      const response = await axios.post(
+        process.env.RESET_PASSWORD_API_URL,
+        {
+          _request: {
+            UserId: UserId,
+            NewPassword: newPassword,
+            ConfirmPassword: newPassword,
+          },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+      console.log("RESET PASSWORD RESPONSE:", response.data);
+      return response.data;
+    } catch (error) {
+      console.log("RESET PASSWORD ERROR:", error.response?.data || error.message);
+      throw error;
+    }
 }
 async function getProjectDetails(projectId) {
 

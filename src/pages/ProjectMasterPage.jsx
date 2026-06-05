@@ -1,22 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { STATUS_STYLES } from '../data/projects.js';
+import ResetPasswordModal from './RestPassword.jsx';
 
 export default function ProjectMasterPage({
   onLogout,
   onViewReport,
-  onViewTime
+  onViewTime,
+  LoginValue
 }) {
 
   const [projects, setProjects] = useState([]);
   const [projectListed, setProjectListed] = useState(false);
   const [loading, setLoading] = useState(true);
   const username = localStorage.getItem("username");
+  const UserId = localStorage.getItem("usermail");
   const initials = username?.substring(0, 2).toUpperCase();
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('Total');
   const [viewDetails,setViewDetails]=useState(null);
+  const [showProfileMenu, setShowProfileMenu]=useState(false);
+  const [showResetModal, setShowResetModal] =useState(false);
   const API = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
@@ -79,6 +84,33 @@ export default function ProjectMasterPage({
 };
 
     fetchProjects();
+      const handleClickOutside = (
+    event
+  ) => {
+
+    if (
+      profileRef.current &&
+      !profileRef.current.contains(
+        event.target
+      )
+    ) {
+
+      setShowProfileMenu(false);
+
+    }
+
+  };
+
+  document.addEventListener(
+    "mousedown",
+    handleClickOutside
+  );
+
+  return () =>
+    document.removeEventListener(
+      "mousedown",
+      handleClickOutside
+    );
 
   }, [API]);
 
@@ -131,7 +163,7 @@ export default function ProjectMasterPage({
     'InProcess',
     'Finished'
   ];*/
-
+  const profileRef = useRef(null);
   // SAFE FILTER
   const filtered = Array.isArray(projects)
     ? projects.filter((p) => {
@@ -186,9 +218,21 @@ export default function ProjectMasterPage({
       (p) => p.ProjectStage === 'Finished'
     ).length,
   };
+  const handleResetPassword = async (data) => {
+    try {
+      // Make API call to reset password
+      axios.post(`${API}/api/auth/ResetPassword`, { UserId, newPassword: data.newPassword })
+        .then((response) => {
+          console.log(response.data);
+        });
+        onLogout();
+    } catch (error) {
+      console.error("Error resetting password:", error);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="relative min-h-screen bg-gray-100">
 
       {/* LOADING */}
       {loading && (
@@ -242,9 +286,84 @@ export default function ProjectMasterPage({
 
               </div>
 
-              <div className="flex items-center gap-4">
+              <div ref={profileRef} className="relative">
+                 <button
+    onClick={() =>
+      setShowProfileMenu(
+        !showProfileMenu
+      )
+    }
+    className="flex items-center justify-center w-10 h-10 text-sm font-bold text-white transition rounded-full bg-gradient-to-r from-slate-800 to-black hover:scale-105"
+  >
+    {initials}
+  </button>
 
-                <div className="flex items-center justify-center w-8 h-8 text-xs font-semibold text-white rounded-full bg-gray-950">
+  {showProfileMenu && (
+
+    <div className="absolute right-0 z-50 mt-3 overflow-hidden bg-white border border-gray-200 shadow-2xl w-72 rounded-2xl">
+
+      {/* HEADER */}
+      <div className="p-5 text-center bg-gradient-to-r from-slate-900 to-black">
+
+        <div className="flex items-center justify-center w-16 h-16 mx-auto mb-3 text-xl font-bold text-black bg-white rounded-full">
+
+          {initials}
+
+        </div>
+
+        <h3 className="font-semibold text-white">
+          {}
+        </h3>
+
+        <p className="mt-1 text-xs text-gray-300">
+        {UserId}
+        </p>
+
+      </div>
+
+      {/* MENU ITEMS */}
+
+      <button
+        className="flex items-center w-full gap-3 px-5 py-4 text-sm hover:bg-gray-100"
+        onClick={() =>
+          alert(
+            "View Profile Clicked"
+          )
+        }
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#434343"><path d="M234-276q51-39 114-61.5T480-360q69 0 132 22.5T726-276q35-41 54.5-93T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 59 19.5 111t54.5 93Zm146.5-204.5Q340-521 340-580t40.5-99.5Q421-720 480-720t99.5 40.5Q620-639 620-580t-40.5 99.5Q539-440 480-440t-99.5-40.5ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm100-95.5q47-15.5 86-44.5-39-29-86-44.5T480-280q-53 0-100 15.5T294-220q39 29 86 44.5T480-160q53 0 100-15.5ZM523-537q17-17 17-43t-17-43q-17-17-43-17t-43 17q-17 17-17 43t17 43q17 17 43 17t43-17Zm-43-43Zm0 360Z"/></svg>
+         View Profile
+
+      </button>
+
+      <button
+        className="flex items-center w-full gap-3 px-5 py-4 text-sm hover:bg-gray-100"
+        onClick={() => setShowResetModal(true)}
+      >
+
+        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#434343"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480h80q0 66 25 124.5t68.5 102q43.5 43.5 102 69T480-159q134 0 227-93t93-227q0-134-93-227t-227-93q-89 0-161.5 43.5T204-640h116v80H80v-240h80v80q55-73 138-116.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-80-240q-17 0-28.5-11.5T360-360v-120q0-17 11.5-28.5T400-520v-40q0-33 23.5-56.5T480-640q33 0 56.5 23.5T560-560v40q17 0 28.5 11.5T600-480v120q0 17-11.5 28.5T560-320H400Zm40-200h80v-40q0-17-11.5-28.5T480-600q-17 0-28.5 11.5T440-560v40Z"/></svg>
+         Reset Password
+
+      </button>
+
+      <div className="border-t" />
+
+      <button
+        onClick={onLogout}
+        className="flex items-center w-full gap-3 px-5 py-4 text-sm text-red-600 hover:bg-red-50"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#434343"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/></svg>
+        Sign Out
+
+      </button>
+
+    </div>
+
+  )}
+  </div>
+  </div>
+
+                {/*<div className="flex items-center justify-center w-8 h-8 text-xs font-semibold text-white rounded-full bg-gray-950">
                   {initials}
                 </div>
 
@@ -256,9 +375,9 @@ export default function ProjectMasterPage({
                   <span><svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="#434343"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/></svg></span>
                 </button>
 
-              </div>
+              </div>*/}
 
-            </div>
+            
 
           </header>
 
@@ -480,6 +599,13 @@ export default function ProjectMasterPage({
         </div>
 
       )}
+      <ResetPasswordModal
+  isOpen={showResetModal}
+  onClose={() => setShowResetModal(false)}
+  onSubmit={(data) => {
+    handleResetPassword(data); 
+  }}
+/>
 
     </div>
   );

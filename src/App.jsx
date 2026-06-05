@@ -10,7 +10,7 @@ from './pages/ProjectReportPage';
 import TimeManagementPage from './pages/TimeManagement';
 
 export default function App() {
-
+  const[LoginValue,setLoginValue] = useState(null);
   // login | projects | report
   const [page, setPage] =
     useState('login');
@@ -23,8 +23,9 @@ export default function App() {
     useState(null);
 
   // LOGIN
-  const handleLogin = () => {
+  const handleLogin = (value) => {
 
+    setLoginValue(value);
     setPage('projects');
   };
 
@@ -76,6 +77,7 @@ export default function App() {
 
       <ProjectMasterPage
         onLogout={handleLogout}
+        LoginValue={LoginValue}
         onViewReport={
           handleViewReport
         }
