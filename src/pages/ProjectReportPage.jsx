@@ -180,13 +180,12 @@ export default function ProjectReportPage({
     const res = await axios.get(
   `${API}/api/project-report/activities/${projectId}`
     );
+const actions =
+  (res.data.Activities || [])
+    .map(item => item["Disciplinary Action"])
+    .filter(Boolean);
 
-    const actions =
-      (res.data.Activities || []).map(
-        item => item["Primilinery action"]
-      );
-
-    setDisciplineActions(actions);
+setDisciplineActions(actions);
 
   } catch (error) {
 
