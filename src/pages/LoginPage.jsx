@@ -39,34 +39,25 @@ export default function LoginPage({ onLogin }) {
 
     if (res.data["Login status"] === "YES") {
 
-      // Save login details
-      localStorage.setItem(
-        "usermail",
-        UserID
-      );
-
-      localStorage.setItem(
-        "password",
-        password
-      );
-
-      localStorage.setItem(
+    localStorage.setItem("usermail", UserID);
+    localStorage.setItem("password", password);
+    localStorage.setItem(
         "username",
         res.data["User Name"]
-      );
+    );
 
-      // Save RecId if API returns it
-      if (res.data["RecId"]) {
-        localStorage.setItem(
-          "RecId",
-          res.data["RecId"]
-        );
-      }
+    localStorage.setItem(
+        "RecId",
+        res.data["User RecId"]
+    );
 
-      // Pass API response directly
-      onLogin(res.data);
+    console.log(
+      "Stored RecId:",
+      localStorage.getItem("RecId")
+    );
 
-    } else {
+    onLogin(res.data);
+} else {
       setError(
         "Invalid UserID or Password"
       );
