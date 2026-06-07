@@ -30,13 +30,11 @@ export default function ProjectMasterPage({
 
   try {
 
-    const userRecId =
-      localStorage.getItem("userRecId");
+  const userRecId =
+  localStorage.getItem("RecId");
 
-    console.log(
-      "Logged User RecId:",
-      userRecId
-    );
+console.log("Stored LocalStorage:", localStorage);
+console.log("Logged User RecId:", userRecId);
 
     const res = await axios.get(
       `${API}/api/projects/my-projects`
