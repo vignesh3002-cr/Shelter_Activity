@@ -31,6 +31,7 @@ export default function LoginPage({ onLogin }) {
 
   localStorage.setItem("usermail",UserID);
   localStorage.setItem("password",password);
+  localStorage.setItem("userRecId",res.data["User RecId"]);
   localStorage.setItem(
     "username",
     res.data["User Name"]

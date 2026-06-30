@@ -39,7 +39,11 @@ export default function ProjectMasterPage({
     );
 
     const res = await axios.get(
-      `${API}/api/projects/my-projects`
+      "http://localhost:5000/api/projects/my-projects"
+    );
+    console.log(
+      "Fetched Projects:",
+      res.data
     );
 
     const projectData =
