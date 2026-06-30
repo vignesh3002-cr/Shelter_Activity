@@ -37,7 +37,7 @@ console.log("Stored LocalStorage:", localStorage);
 console.log("Logged User RecId:", userRecId);
 
     const res = await axios.get(
-      "http://localhost:5000/api/projects/my-projects"
+      `${API}/api/projects/my-projects`
     );
     console.log(
       "Fetched Projects:",
