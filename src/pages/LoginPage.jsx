@@ -9,47 +9,70 @@ export default function LoginPage({ onLogin }) {
   const isTouched = password.length > 0;
   const [showPw, setShowPw]     = useState(false)
   const [loading, setLoading]   = useState(false)
-  const[value,setValue] = useState(null)
   const[error,setError] = useState('')
   const API = import.meta.env.VITE_API_URL;
-  const handleSubmit = async(e) => {
-    e.preventDefault()
-    setLoading(true)
-    try{
-      if (!UserID || !password) {
-        if(!UserID) setError("Please enter UserID.");
-        else if(!password) setError("Please enter Password.");
-        setLoading(false);
-        return;
-      }
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setError("");
 
-    const res=await axios.post(`${API}/api/auth/login`, { UserID, password });
-    console.log(res.data);
-    setValue(res.data);
- // Adjust based on actual response structure
+  try {
+    if (!UserID || !password) {
+      if (!UserID)
+        setError("Please enter UserID.");
+      else
+        setError("Please enter Password.");
+
+      setLoading(false);
+      return;
+    }
+
+    const res = await axios.post(
+      `${API}/api/auth/login`,
+      {
+        UserID,
+        password,
+      }
+    );
+
+    console.log("Login Response:", res.data);
+
     if (res.data["Login status"] === "YES") {
 
   localStorage.setItem("usermail",UserID);
   localStorage.setItem("password",password);
-  localStorage.setItem("userRecId",res.data["User RecId"]);
   localStorage.setItem(
     "username",
     res.data["User Name"]
   );
 
+    localStorage.setItem(
+        "RecId",
+        res.data["User RecId"]
+    );
 
-  onLogin(value);
+    console.log(
+      "Stored RecId:",
+      localStorage.getItem("RecId")
+    );
 
-}else{
-      setError("Invalid UserID or Password");
+    onLogin(res.data);
+} else {
+      setError(
+        "Invalid UserID or Password"
+      );
     }
-    setLoading(false)
+
   } catch (error) {
-    console.error("Login error:", error);
+    console.error(
+      "Login error:",
+      error
+    );
     setError("SERVER ERROR");
-    setLoading(false)
+  } finally {
+    setLoading(false);
   }
-  }
+};
   return (
     <div className="flex items-center justify-center min-h-screen px-4 bg-gray-100">
       <div className="w-full max-w-md px-8 py-10 bg-gray-100 rounded-2xl animate-fade-up">
