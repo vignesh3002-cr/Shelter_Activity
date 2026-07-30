@@ -2,31 +2,39 @@ import { useState } from 'react';
 
 import LoginPage from './pages/LoginPage';
 
+import AdminPortal from './pages/Adminportal';
+
 import ProjectMasterPage
-from './pages/ProjectMasterPage';
+  from './pages/ProjectMasterPage';
 
 import ProjectReportPage
-from './pages/ProjectReportPage';
+  from './pages/ProjectReportPage';
 import TimeManagementPage from './pages/TimeManagement';
 
 export default function App() {
-  const[LoginValue,setLoginValue] = useState(null);
+  const [LoginValue, setLoginValue] = useState(null);
   // login | projects | report
   const [page, setPage] =
     useState('login');
-  const[selectedProjectID,
-  setSelectedProjectID] =
+  const [selectedProjectID,
+    setSelectedProjectID] =
     useState(null);
 
   const [selectedProject,
-  setSelectedProject] =
+    setSelectedProject] =
     useState(null);
 
   // LOGIN
   const handleLogin = (value) => {
 
     setLoginValue(value);
-    setPage('projects');
+
+    if (value.Role === "Admin") {
+      setPage("admin-portal");
+    } else {
+      setPage("projects");
+    }
+
   };
 
   // VIEW REPORT
@@ -66,6 +74,16 @@ export default function App() {
     return (
       <LoginPage
         onLogin={handleLogin}
+      />
+    );
+  }
+
+  if (page === 'admin-portal') {
+
+    return (
+      <AdminPortal
+        onLogout={handleLogout}
+        setPage={setPage}
       />
     );
   }
