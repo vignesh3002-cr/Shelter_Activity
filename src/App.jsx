@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import LoginPage from './pages/LoginPage';
 
-import AdminPortal from './pages/Adminportal';
+import AdminPortal from './pages/AdminPortal';
 
 import ProjectMasterPage
   from './pages/ProjectMasterPage';
